@@ -1,4 +1,4 @@
-# 微博自动签到工具
+# 微博超话自动签到工具
 
 ## 软件下载链接
 进入到[https://github.com/duan602728596/document/blob/master/48/README.md](https://github.com/duan602728596/document/blob/master/48/README.md)下载
