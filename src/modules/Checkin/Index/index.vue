@@ -56,7 +56,7 @@
         return `${ username } ${ status === 1 ? '【已签到】' : '' }`;
       },
       // 签到
-      async onCheckin(): void{
+      async onCheckin(): Promise<void>{
         try{
           this.btnLoading = true;
           // 获取超话列表
