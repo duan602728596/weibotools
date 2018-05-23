@@ -1,0 +1,6 @@
+node_modules
+config
+scripts
+.dll
+build
+weibo-pattlock.js
