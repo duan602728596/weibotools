@@ -1,6 +1,7 @@
 /**
  * 初始化数据库
  */
+
 import IndexedDB from 'indexeddb-tools';
 import config from './config';
 

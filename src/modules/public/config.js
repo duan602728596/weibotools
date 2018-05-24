@@ -1,3 +1,7 @@
+/**
+ * 参数配置
+ */
+
 const config: Object = {
   indexeddb: {
     name: 'weibo-automatic-sign-in-tool',
