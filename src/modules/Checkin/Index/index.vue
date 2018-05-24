@@ -4,9 +4,9 @@
     <div class="toolsbox clearfix">
       <h4 class="fl">一键签到</h4>
       <router-link class="fr" to="/">
-        <el-button type="danger" size="mini">返回</el-button>
+        <el-button type="danger" size="mini" icon="el-icon-circle-close">返回</el-button>
       </router-link>
-      <el-button class="fr mr10" v-if="btnLoading === false" type="primary" size="mini" @click="onCheckin()">一键签到</el-button>
+      <el-button class="fr mr10" v-if="btnLoading === false" type="primary" size="mini" icon="el-icon-edit" @click="onCheckin()">一键签到</el-button>
       <el-button class="fr mr10" v-else type="primary" size="mini" :loading="btnLoading">签到中...</el-button>
     </div>
     <!-- 签到列表 -->

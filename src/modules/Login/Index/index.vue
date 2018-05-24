@@ -4,9 +4,9 @@
     <div class="toolsbox clearfix">
       <h4 class="fl">账号登录</h4>
       <router-link class="fr" to="/">
-        <el-button type="danger" size="mini">返回</el-button>
+        <el-button type="danger" size="mini" icon="el-icon-circle-close-outline">返回</el-button>
       </router-link>
-      <el-button class="fr mr10" type="primary" size="mini" @click="onDialogDisplay(true)">登录</el-button>
+      <el-button class="fr mr10" type="primary" size="mini" icon="el-icon-mobile-phone" @click="onDialogDisplay(true)">登录</el-button>
     </div>
     <!-- 表格 -->
     <div class="tablebox">
@@ -15,7 +15,7 @@
         <el-table-column label="登录日期" prop="loginTime"></el-table-column>
         <el-table-column label="操作" prop="handle">
           <template slot-scope="scope">
-            <el-button type="danger" size="mini" @click="deleteLogin(scope)">删除</el-button>
+            <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteLogin(scope)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
