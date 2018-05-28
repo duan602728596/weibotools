@@ -1,4 +1,4 @@
-<template>
+<template type="html">
   <div class="vue-app" id="vue-app">
     <router-view></router-view>
   </div>

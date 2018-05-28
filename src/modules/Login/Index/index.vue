@@ -10,9 +10,10 @@
     </div>
     <!-- 表格 -->
     <div class="tablebox">
-      <el-table :data="$store.getters['login/getLoginList']()" size="mini" border>
+      <el-table :data="$store.getters['login/getLoginList']()" size="mini">
         <el-table-column label="账号" prop="username"></el-table-column>
         <el-table-column label="登录日期" prop="loginTime"></el-table-column>
+        <el-table-column label="st" prop="st"></el-table-column>
         <el-table-column label="操作" prop="handle">
           <template slot-scope="scope">
             <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteLogin(scope)">删除</el-button>
@@ -42,7 +43,7 @@
   import Base64 from 'Base64';
   import hint from 'hint';
   import config from '../../public/config';
-  import { yanzheng, getCaptcha, yanzhengCaptcha, loginWeibo } from './loginWeibo';
+  import { yanzheng, getCaptcha, yanzhengCaptcha, loginWeibo, getSt } from './loginWeibo';
 
   export default {
     data(): Object{
@@ -79,10 +80,13 @@
       // 登录微博
       async loginWeibo(id: ?string): Promise<void>{
         const _this: this = this;
+        // 登录
         const step4: {
           data: Object,
           cookie: string
         } = await loginWeibo(this.weiboLogin.username, this.weiboLogin.password, id);
+        // 获取st
+        const step5: Object = await getSt(step4.cookie);
         // 添加数据
         IndexedDB(config.indexeddb.name, config.indexeddb.version, {
           success(event: Event): void{
@@ -90,7 +94,8 @@
             const data: Object = {
               username: _this.weiboLogin.username,
               loginTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-              cookie: step4.cookie
+              cookie: step4.cookie,
+              st: step5.data.st
             };
             store.put(data);
             // 修改ui
@@ -182,7 +187,7 @@
         success(event: Event): void{
           const store: Object = this.getObjectStore(config.indexeddb.objectStore[0].name, true);
           const results: [] = [];
-          store.cursor(config.indexeddb.key[2], (event2: Event)=>{
+          store.cursor(config.indexeddb.objectStore[0].key[1], (event2: Event)=>{
             const result: Object = event2.target.result;
             if(result){
               results.push(result.value);

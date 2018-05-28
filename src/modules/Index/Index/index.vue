@@ -13,6 +13,12 @@
         </router-link>
         <router-link to="/Checkin">一键签到</router-link>
       </el-col>
+      <el-col class="group" :xs="8" :sm="8" :md="6" :lg="4" :xl="4">
+        <router-link class="imgLink" to="/Dianzan" title="一键点赞">
+          <img src="./l3.jpg">
+        </router-link>
+        <router-link to="/Checkin">一键点赞</router-link>
+      </el-col>
     </el-row>
   </div>
 </template>
