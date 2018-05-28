@@ -1,7 +1,7 @@
 {
   "name": "weibo-auto-check-in-tool",
   "version": "0.0.2",
-  "description": "微博超话自动签到工具。",
+  "description": "微博超话自动签到、自动点赞工具。",
   "license": "GNU General Public License v3.0",
   "scripts": {
     "runel": "cross-env NODE_ENV=development ./node_modules/.bin/electron .",
@@ -21,14 +21,14 @@
     "request": "^2.87.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.47",
-    "@babel/plugin-proposal-decorators": "^7.0.0-beta.47",
-    "@babel/plugin-proposal-do-expressions": "^7.0.0-beta.47",
-    "@babel/plugin-proposal-export-default-from": "^7.0.0-beta.47",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.47",
-    "@babel/plugin-proposal-optional-chaining": "^7.0.0-beta.47",
-    "@babel/preset-flow": "^7.0.0-beta.47",
-    "@babel/preset-react": "^7.0.0-beta.47",
+    "@babel/core": "^7.0.0-beta.49",
+    "@babel/plugin-proposal-decorators": "^7.0.0-beta.49",
+    "@babel/plugin-proposal-do-expressions": "^7.0.0-beta.49",
+    "@babel/plugin-proposal-export-default-from": "^7.0.0-beta.49",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.49",
+    "@babel/plugin-proposal-optional-chaining": "^7.0.0-beta.49",
+    "@babel/preset-flow": "^7.0.0-beta.49",
+    "@babel/preset-react": "^7.0.0-beta.49",
     "asar": "^0.14.3",
     "babel-eslint": "^8.2.3",
     "babel-loader": "^8.0.0-beta.2",
@@ -36,10 +36,10 @@
     "bundle-loader": "^0.5.6",
     "cross-env": "^5.1.6",
     "css-loader": "^0.28.11",
-    "electron": "^2.0.1",
+    "electron": "^2.0.2",
     "element-ui": "^2.3.9",
     "eslint": "^4.19.1",
-    "eslint-plugin-flowtype": "^2.46.3",
+    "eslint-plugin-flowtype": "^2.47.1",
     "file-loader": "^1.1.11",
     "html-webpack-plugin": "^3.2.0",
     "indexeddb-tools": "^2.0.3",
@@ -56,13 +56,13 @@
     "uglifyjs-webpack-plugin": "^1.2.5",
     "url-loader": "^1.0.1",
     "vue": "^2.5.16",
-    "vue-loader": "^15.1.0",
+    "vue-loader": "^15.2.1",
     "vue-router": "^3.0.1",
     "vue-style-loader": "^4.1.0",
     "vue-template-compiler": "^2.5.16",
     "vuex": "^3.0.1",
-    "webpack": "^4.8.2",
-    "webpack-cli": "^2.1.3"
+    "webpack": "^4.9.1",
+    "webpack-cli": "^2.1.4"
   },
   "peerDependencies": {
     "node-modules-clean": "^0.1.1"
