@@ -10,12 +10,12 @@
     </div>
     <!-- 表格 -->
     <div class="tablebox">
-      <el-table size="mini">
+      <el-table :data="$store.getters['dianzan/getLfidList']()" size="mini">
         <el-table-column label="名称" prop="name"></el-table-column>
-        <el-table-column label="lfid" prop="ifid"></el-table-column>
+        <el-table-column label="lfid" prop="lfid"></el-table-column>
         <el-table-column label="操作" prop="handle">
           <template slot-scope="scope">
-            <el-button type="danger" size="mini" icon="el-icon-delete">删除</el-button>
+            <el-button type="danger" size="mini" icon="el-icon-delete" @click="onDeleteLfid(scope)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -29,7 +29,7 @@
         <el-form-item label="lfid：" prop="lfid">
           <el-input v-model="addLfid.lfid"></el-input>
         </el-form-item>
-        <el-button class="mr10" type="primary" size="mini">添加</el-button>
+        <el-button class="mr10" type="primary" size="mini" @click="onAddLfid()">添加</el-button>
         <el-button type="danger" size="mini" @click="onDialogDisplay(false)">取消</el-button>
       </el-form>
     </el-dialog>
@@ -37,10 +37,13 @@
 </template>
 
 <script type="text/javascript">
+  import IndexedDB from 'indexeddb-tools';
+  import config from '../../public/config';
+
   export default {
     data(): Object{
       return {
-        visible: true,   // 弹出层
+        visible: false,   // 弹出层
         // 校验规则
         rules: {
           name: {
@@ -68,6 +71,77 @@
           }, 100);
         }
       },
+      // 添加一个lfid
+      onAddLfid(): void{
+        const _this: this = this;
+        this.$refs['addLfid'].validate(async(valid: boolean): Promise<void>=>{
+          if(!valid) return void 0;
+          IndexedDB(config.indexeddb.name, config.indexeddb.version, {
+            success(event: Event): void{
+              const store: Object = this.getObjectStore(config.indexeddb.objectStore[1].name, true);
+              const data: Object = {
+                name: _this.addLfid.name,
+                lfid: _this.addLfid.lfid
+              };
+              store.put(data);
+              // 修改ui
+              const list: [] = _this.$store.getters['dianzan/getLfidList']();
+              let index: number = -1;
+              for(let i: number = 0, j: number = list.length; i < j; i++){
+                if(_this.addLfid.lfid === list[i].lfid){
+                  index = i;
+                  break;
+                }
+              }
+              if(index === -1){
+                list.push(data);
+              }else{
+                list[index] = data;
+              }
+              _this.$store.dispatch('dianzan/lfidList', {
+                data: list
+              });
+              _this.$refs['addLfid'].resetFields();
+              this.close();
+            }
+          });
+        });
+      },
+      // 删除一个lfid
+      onDeleteLfid(scope: Object): void{
+        const _this: this = this;
+        IndexedDB(config.indexeddb.name, config.indexeddb.version, {
+          success(event: Event): void{
+            const store: Object = this.getObjectStore(config.indexeddb.objectStore[1].name, true);
+            store.delete(scope.row.lfid);
+            _this.$store.dispatch('dianzan/deleteLfid', {
+              index: scope.$index
+            });
+            this.close();
+          }
+        });
+      }
+    },
+    mounted(): void{
+      const _this: this = this;
+      IndexedDB(config.indexeddb.name, config.indexeddb.version, {
+        success(event: Event): void{
+          const store: Object = this.getObjectStore(config.indexeddb.objectStore[1].name, true);
+          const results: [] = [];
+          store.cursor(config.indexeddb.objectStore[1].key[1], (event2: Event)=>{
+            const result: Object = event2.target.result;
+            if(result){
+              results.push(result.value);
+              result.continue();
+            }else{
+              _this.$store.dispatch('dianzan/lfidList', {
+                data: results
+              });
+              this.close();
+            }
+          });
+        }
+      });
     }
   };
 </script>

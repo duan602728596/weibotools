@@ -4,7 +4,7 @@ export default {
     loginList: []  // 账号登录列表
   },
   getters: {
-    getLoginList: (state: Object): Function => (): number => state.loginList
+    getLoginList: (state: Object): Function => (): Array => state.loginList
   },
   mutations: {
     loginList(state: Object, payload: Object): void{

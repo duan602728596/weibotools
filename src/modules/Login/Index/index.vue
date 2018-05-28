@@ -16,7 +16,7 @@
         <el-table-column label="st" prop="st"></el-table-column>
         <el-table-column label="操作" prop="handle">
           <template slot-scope="scope">
-            <el-button type="danger" size="mini" icon="el-icon-delete" @click="deleteLogin(scope)">删除</el-button>
+            <el-button type="danger" size="mini" icon="el-icon-delete" @click="onDeleteLogin(scope)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -167,7 +167,7 @@
         });
       },
       // 删除
-      deleteLogin(scope: Object): void{
+      onDeleteLogin(scope: Object): void{
         const _this: this = this;
         IndexedDB(config.indexeddb.name, config.indexeddb.version, {
           success(event: Event): void{

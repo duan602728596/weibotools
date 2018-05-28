@@ -19,7 +19,7 @@ function config(options){
       rules: [
         { // js
           test: /^.*\.js$/,
-          use: [babelConfig],
+          use: [babelConfig, 'eslint-loader'],
           exclude: /(dll\.js|node_modules|js-base64|weibo-pattlock)/
         },
         {
