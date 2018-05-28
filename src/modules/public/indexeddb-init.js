@@ -12,21 +12,17 @@ IndexedDB(config.indexeddb.name, config.indexeddb.version, {
     this.close();
   },
   upgradeneeded(event: Event): void{
-    if(!this.hasObjectStore(objectStore[0].name)){
-      this.createObjectStore(objectStore[0].name, objectStore[0].key[0], [
-        {
-          name: objectStore[0].key[1],
-          index: objectStore[0].key[1]
-        },
-        {
-          name: objectStore[0].key[2],
-          index: objectStore[0].key[2]
-        },
-        {
-          name: objectStore[0].key[3],
-          index: objectStore[0].key[3]
+    objectStore.map((item: Object, index: number): void=>{
+      if(!this.hasObjectStore(item.name)){
+        const keys: Object[] = [];
+        for(let i: number = 1, j: number = item.key.length; i < j; i++){
+          keys.push({
+            name: item.key[i],
+            index: item.key[i]
+          });
         }
-      ]);
-    }
+        this.createObjectStore(item.name, item.key[0], keys);
+      }
+    });
   }
 });

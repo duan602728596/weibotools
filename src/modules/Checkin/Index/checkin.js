@@ -55,6 +55,10 @@ export function chaohuaListData(rawArray: Array): Array{
  * 签到
  * @param { string } cookie
  * @param { string } containerid
+ *
+ * todo: 未来签到接口可能变化，旧接口目前仍然可以签到，暂时全部返回100000状态，无论是否签到成功
+ * 新接口使用 【POST：https://m.weibo.cn/api/container/button?sign=686d57&request_url=http%3A%2F%2Fi.huati.weibo.com%2Fmobile%2Fsuper%2Factive_checkin%3Fpageid%3D10080848fab43dc8c0cce225e66ce7109d399c】接口，
+ * 地址来自于超话地址的pageInfo.toolbar_menus[0].params.action
  */
 export function checkIn(cookie: string, containerid: string): Promise{
   return new Promise((resolve: Function, reject: Function): void=>{
@@ -69,7 +73,6 @@ export function checkIn(cookie: string, containerid: string): Promise{
       if(err){
         reject(err);
       }else{
-        console.log(data);
         resolve(JSON.parse(data));
       }
     });
