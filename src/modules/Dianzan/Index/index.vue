@@ -3,16 +3,19 @@
     <!-- 顶部菜单 -->
     <div class="toolsbox clearfix">
       <h4 class="fl">一键点赞</h4>
+      <p class="fl">（每次点赞间隔3秒）</p>
       <router-link class="fr" to="/">
         <el-button type="danger" size="mini" icon="el-icon-circle-close-outline">返回</el-button>
       </router-link>
-      <el-button class="fr mr10" type="primary" size="mini" icon="el-icon-circle-plus" @click="onDialogDisplay(true)">添加lfid</el-button>
+      <el-button class="fr mr10" size="mini" icon="el-icon-circle-plus" @click="onDialogDisplay(true)">添加lfid</el-button>
+      <el-button class="fr mr10" type="primary" size="mini" icon="el-icon-star-on" :loading="btnLoading" @click="onDianzan()">一键点赞</el-button>
     </div>
     <!-- 表格 -->
     <div class="tablebox">
       <el-table :data="$store.getters['dianzan/getLfidList']()" size="mini">
         <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="lfid" prop="lfid"></el-table-column>
+        <el-table-column label="点赞最大页数" prop="page"></el-table-column>
         <el-table-column label="操作" prop="handle">
           <template slot-scope="scope">
             <el-button type="danger" size="mini" icon="el-icon-delete" @click="onDeleteLfid(scope)">删除</el-button>
@@ -29,6 +32,9 @@
         <el-form-item label="lfid：" prop="lfid">
           <el-input v-model="addLfid.lfid"></el-input>
         </el-form-item>
+        <el-form-item label="点赞最大页数：" prop="page">
+          <el-input v-model="addLfid.page"></el-input>
+        </el-form-item>
         <el-button class="mr10" type="primary" size="mini" @click="onAddLfid()">添加</el-button>
         <el-button type="danger" size="mini" @click="onDialogDisplay(false)">取消</el-button>
       </el-form>
@@ -39,11 +45,14 @@
 <script type="text/javascript">
   import IndexedDB from 'indexeddb-tools';
   import config from '../../public/config';
+  import { getSt } from '../../public/function';
+  import { getIndex, dianzan, yanChi } from './dianzan';
 
   export default {
     data(): Object{
       return {
-        visible: false,   // 弹出层
+        visible: false,     // 弹出层
+        btnLoading: false,  // 按钮是否加载中
         // 校验规则
         rules: {
           name: {
@@ -53,11 +62,16 @@
           lfid: {
             required: true,
             message: '请输入lfid！'
+          },
+          page: {
+            required: true,
+            message: '请输入点赞最大页数！'
           }
         },
         addLfid: {
           name: '',
-          lfid: ''
+          lfid: '',
+          page: '1'
         }
       };
     },
@@ -81,7 +95,8 @@
               const store: Object = this.getObjectStore(config.indexeddb.objectStore[1].name, true);
               const data: Object = {
                 name: _this.addLfid.name,
-                lfid: _this.addLfid.lfid
+                lfid: _this.addLfid.lfid,
+                page: _this.addLfid.page
               };
               store.put(data);
               // 修改ui
@@ -120,6 +135,78 @@
             this.close();
           }
         });
+      },
+      // 获取登录列表
+      getLoginList(): Promise{
+        return new Promise((resolve: Function, reject: Function): void=>{
+          IndexedDB(config.indexeddb.name, config.indexeddb.version, {
+            success(event: Event): void{
+              const store: Object = this.getObjectStore(config.indexeddb.objectStore[0].name, true);
+              const results: [] = [];
+              store.cursor(config.indexeddb.objectStore[0].key[1], (event2: Event)=>{
+                const result: Object = event2.target.result;
+                if(result){
+                  results.push(result.value);
+                  result.continue();
+                }else{
+                  resolve(results);
+                  this.close();
+                }
+              });
+            }
+          });
+        }).catch((err: any): void=>{
+          console.error(err);
+        });
+      },
+      // 一键点赞
+      async onDianzan(): Promise<void>{
+        this.btnLoading = true;
+        try{
+          const loginList: Object[] = await this.getLoginList();
+          const lfidList: Object[] = this.$store.getters['dianzan/getLfidList']();
+          // 获取st
+          for(let i: number = 0, j: number = loginList.length; i < j; i++){
+            const step: {
+              data: Object,
+              cookie: string
+            } = await getSt(loginList[i].cookie);
+            loginList[i].st = step.data.data.st;
+            loginList[i].cookie += `; ${ step.cookie }`;
+          }
+          for(let i: number = 0, j: number = lfidList.length, k: number = loginList.length; i < j; i++){
+            const item: Object = lfidList[i];
+            let cards: Object[] = [];
+            // 获取信息
+            for(let p: number = 1, q: number = Number(item.page); p <= q; p++){
+              const list: Object = await getIndex(item.lfid, p);
+              const cds: Object[] = list?.data?.cards || [];
+              if(cds.length === 0){
+                break;
+              }else{
+                cards = cards.concat(cds);
+              }
+            }
+            // 循环点赞
+            for(let l: number = 0, m: number = cards.length; l < m; l++){
+              const item2: Object = cards[l];
+              if(item2.card_type === 9){
+                for(let n: number = 0; n < k; n++){
+                  const item3: Object = loginList[n];
+                  const step: Object = await dianzan(item3.cookie, item2.mblog.id, item3.st);
+                  console.log(step);
+                  await yanChi(3000);
+                }
+              }
+            }
+            await yanChi(8000);
+          }
+          this.btnLoading = false;
+        }catch(err){
+          this.btnLoading = false;
+          this.$message.error('点赞失败！');
+          console.error(err);
+        }
       }
     },
     mounted(): void{

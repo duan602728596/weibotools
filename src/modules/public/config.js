@@ -5,15 +5,15 @@
 const config: Object = {
   indexeddb: {
     name: 'weibo-automatic-sign-in-tool',
-    version: 3,
+    version: 5,
     objectStore: [
       {
         name: 'login-list',
-        key: ['username', 'loginTime', 'cookie', 'st']
+        key: ['username', 'loginTime', 'cookie']
       },
       {
         name: 'lfid-list',
-        key: ['lfid', 'name']
+        key: ['lfid', 'name', 'page']
       }
     ]
   }

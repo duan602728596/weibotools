@@ -99,27 +99,3 @@ export function loginWeibo(username: string, password: string, id: ?string): Pro
     console.error(err);
   });
 }
-
-/**
- * 获取st
- * @param { string } cookie
- */
-export function getSt(cookie: string): Promise{
-  return new Promise((resolve: Function, reject: Function): void=>{
-    request({
-      uri: 'https://m.weibo.cn/api/config',
-      method: 'GET',
-      headers: {
-        Cookie: cookie
-      }
-    }, (err: any, res: Object, data: string): void=>{
-      if(err){
-        reject(err);
-      }else{
-        resolve(JSON.parse(data));
-      }
-    });
-  }).catch((err: any): void=>{
-    console.error(err);
-  });
-}

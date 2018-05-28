@@ -13,7 +13,6 @@
       <el-table :data="$store.getters['login/getLoginList']()" size="mini">
         <el-table-column label="账号" prop="username"></el-table-column>
         <el-table-column label="登录日期" prop="loginTime"></el-table-column>
-        <el-table-column label="st" prop="st"></el-table-column>
         <el-table-column label="操作" prop="handle">
           <template slot-scope="scope">
             <el-button type="danger" size="mini" icon="el-icon-delete" @click="onDeleteLogin(scope)">删除</el-button>
@@ -43,7 +42,7 @@
   import Base64 from 'Base64';
   import hint from 'hint';
   import config from '../../public/config';
-  import { yanzheng, getCaptcha, yanzhengCaptcha, loginWeibo, getSt } from './loginWeibo';
+  import { yanzheng, getCaptcha, yanzhengCaptcha, loginWeibo } from './loginWeibo';
 
   export default {
     data(): Object{
@@ -85,8 +84,6 @@
           data: Object,
           cookie: string
         } = await loginWeibo(this.weiboLogin.username, this.weiboLogin.password, id);
-        // 获取st
-        const step5: Object = await getSt(step4.cookie);
         // 添加数据
         IndexedDB(config.indexeddb.name, config.indexeddb.version, {
           success(event: Event): void{
@@ -94,8 +91,7 @@
             const data: Object = {
               username: _this.weiboLogin.username,
               loginTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-              cookie: step4.cookie,
-              st: step5.data.st
+              cookie: step4.cookie
             };
             store.put(data);
             // 修改ui

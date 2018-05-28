@@ -1,7 +1,7 @@
 export default {
   namespaced: true,
   state: {
-    lfidList: []  // lfid列表
+    lfidList: []    // lfid列表
   },
   getters: {
     getLfidList: (state: Object): Function => (): Array => state.lfidList
