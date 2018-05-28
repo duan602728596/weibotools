@@ -5,22 +5,26 @@
 import IndexedDB from 'indexeddb-tools';
 import config from './config';
 
-const indexeddb: Object = config.indexeddb;
+const objectStore: Object[] = config.indexeddb.objectStore;
 
-IndexedDB(indexeddb.name, indexeddb.version, {
+IndexedDB(config.indexeddb.name, config.indexeddb.version, {
   success(event: Event): void{
     this.close();
   },
   upgradeneeded(event: Event): void{
-    if(!this.hasObjectStore(indexeddb.objectStore)){
-      this.createObjectStore(indexeddb.objectStore, indexeddb.key[0], [
+    if(!this.hasObjectStore(objectStore[0].name)){
+      this.createObjectStore(objectStore[0].name, objectStore[0].key[0], [
         {
-          name: indexeddb.key[1],
-          index: indexeddb.key[1]
+          name: objectStore[0].key[1],
+          index: objectStore[0].key[1]
         },
         {
-          name: indexeddb.key[2],
-          index: indexeddb.key[2]
+          name: objectStore[0].key[2],
+          index: objectStore[0].key[2]
+        },
+        {
+          name: objectStore[0].key[3],
+          index: objectStore[0].key[3]
         }
       ]);
     }

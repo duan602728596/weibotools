@@ -86,7 +86,7 @@
         // 添加数据
         IndexedDB(config.indexeddb.name, config.indexeddb.version, {
           success(event: Event): void{
-            const store: Object = this.getObjectStore(config.indexeddb.objectStore, true);
+            const store: Object = this.getObjectStore(config.indexeddb.objectStore[0].name, true);
             const data: Object = {
               username: _this.weiboLogin.username,
               loginTime: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -166,7 +166,7 @@
         const _this: this = this;
         IndexedDB(config.indexeddb.name, config.indexeddb.version, {
           success(event: Event): void{
-            const store: Object = this.getObjectStore(config.indexeddb.objectStore, true);
+            const store: Object = this.getObjectStore(config.indexeddb.objectStore[0].name, true);
             store.delete(scope.row.username);
             _this.$store.dispatch('login/deleteLoginInformation', {
               index: scope.$index
@@ -180,7 +180,7 @@
       const _this: this = this;
       IndexedDB(config.indexeddb.name, config.indexeddb.version, {
         success(event: Event): void{
-          const store: Object = this.getObjectStore(config.indexeddb.objectStore, true);
+          const store: Object = this.getObjectStore(config.indexeddb.objectStore[0].name, true);
           const results: [] = [];
           store.cursor(config.indexeddb.key[2], (event2: Event)=>{
             const result: Object = event2.target.result;

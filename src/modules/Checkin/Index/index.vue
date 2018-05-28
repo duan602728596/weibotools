@@ -110,9 +110,9 @@
       const _this: this = this;
       IndexedDB(config.indexeddb.name, config.indexeddb.version, {
         success(event: Event): void{
-          const store: Object = this.getObjectStore(config.indexeddb.objectStore, true);
+          const store: Object = this.getObjectStore(config.indexeddb.objectStore[0].name, true);
           const results: [] = [];
-          store.cursor(config.indexeddb.key[2], (event2: Event)=>{
+          store.cursor(config.indexeddb.objectStore[0].key[2], (event2: Event)=>{
             const result: Object = event2.target.result;
             if(result){
               results.push(result.value);
