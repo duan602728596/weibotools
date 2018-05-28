@@ -8,3 +8,6 @@
 
 ## 技术栈
 Pug + Scss + ECMAScript + Vue + Element + Webpack + Electron。
+
+## 微博的lfid查找方法
+[https://github.com/duan602728596/qqtools#微博的lfid查找方法](https://github.com/duan602728596/qqtools#微博的lfid查找方法)
