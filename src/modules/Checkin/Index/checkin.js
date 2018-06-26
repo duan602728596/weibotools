@@ -67,14 +67,32 @@ export function checkIn(cookie: string, containerid: string): Promise{
       method: 'GET',
       headers: {
         Cookie: cookie,
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36'
-      }
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
+                    + ' Chrome/66.0.3359.181 Safari/537.36'
+      },
+      timeout: 5000
     }, (err: any, res: Object, data: string): void=>{
       if(err){
-        reject(err);
+        resolve(null);   // 断线重连
       }else{
         resolve(JSON.parse(data));
       }
     });
+  }).catch((err: any): void=>{
+    console.error(err);
+  });
+}
+
+/**
+ * 避免过于请求的点赞，所以进行了延迟15s
+ * @param { number } time
+ */
+export function yanChi(time: number): Promise{
+  return new Promise((resolve: Function, reject: Function): void=>{
+    setTimeout((): void=>{
+      resolve();
+    }, time);
+  }).catch((err: any): void=>{
+    console.error(err);
   });
 }

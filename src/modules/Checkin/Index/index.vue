@@ -6,7 +6,15 @@
       <router-link class="fr" to="/">
         <el-button type="danger" size="mini" icon="el-icon-circle-close">返回</el-button>
       </router-link>
-      <el-button class="fr mr10" v-if="btnLoading === false" type="primary" size="mini" icon="el-icon-edit" @click="onCheckin()">一键签到</el-button>
+      <el-button class="fr mr10"
+          v-if="btnLoading === false"
+          type="primary"
+          size="mini"
+          icon="el-icon-edit"
+          @click="onCheckin()"
+      >
+        一键签到
+      </el-button>
       <el-button class="fr mr10" v-else type="primary" size="mini" :loading="btnLoading">签到中...</el-button>
     </div>
     <!-- 签到列表 -->
@@ -37,7 +45,7 @@
 <script type="text/javascript">
   import IndexedDB from 'indexeddb-tools';
   import config from '../../public/config';
-  import { getChaohuaList, chaohuaListData, checkIn } from './checkin';
+  import { getChaohuaList, chaohuaListData, checkIn, yanChi } from './checkin';
 
   export default {
     data(): Object{
@@ -80,18 +88,26 @@
             }
             item.children = l;
             // 循环签到超话
-            for(let i: number = 0, j: number = item.children.length; i < j; i++){
-              const item2: Object = item.children[i];
+            const j2: number = item.children.length;
+            let i2: number = 0;
+            while(i2 < j2){
+              const item2: Object = item.children[i2];
               const step1: Object = await checkIn(item.cookie, item2.containerid);
-              if(step1.code === '100000'){
-                // 签到成功
-                item2.status = 1;
-                item2.text = step1.code;  // res.data.alert_title;
+              if(step1){
+                if(step1.code === '100000'){
+                  // 签到成功
+                  item2.status = 1;
+                  item2.text = step1.code;  // res.data.alert_title;
+                }else{
+                  // 其他情况
+                  item2.status = 0;
+                  item2.text = step1.code;  // res.msg;
+                }
+                i2++;
               }else{
-                // 其他情况
-                item2.status = 0;
-                item2.text = step1.code;  // res.msg;
+                this.$message.error(`【${ item2.title_sub }】签到失败。正在重新签到该超话...`);
               }
+              await yanChi(1500);
             }
             item.status = 1;
             this.$store.dispatch('checkin/loginList', {
