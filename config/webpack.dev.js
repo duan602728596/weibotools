@@ -2,6 +2,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const config = require('./webpack.config');
+const cssConfig = require('./css.config');
 const sassConfig = require('./sass.config');
 
 /* 合并配置 */
@@ -16,15 +17,19 @@ module.exports = config({
     rules: [
       { // sass
         test: /^.*\.s(a|c)ss$/,
-        use: ['vue-style-loader', 'css-loader', sassConfig]
+        oneOf: [
+          {
+            resourceQuery: /scoped/,
+            use: ['vue-style-loader', 'css-loader', sassConfig]
+          },
+          {
+            use: ['vue-style-loader', cssConfig, sassConfig]
+          }
+        ]
       },
       { // css
         test: /^.*\.css$/,
         use: ['vue-style-loader', 'css-loader']
-      },
-      { // vue
-        test: /^.*\.vue$/,
-        use: ['vue-loader']
       }
     ]
   },

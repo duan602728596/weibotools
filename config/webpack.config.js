@@ -22,6 +22,10 @@ function config(options){
           use: [babelConfig, 'eslint-loader'],
           exclude: /(dll\.js|node_modules|js-base64|weibo-pattlock)/
         },
+        { // vue
+          test: /^.*\.vue$/,
+          use: ['vue-loader']
+        },
         {
           test: /(dll\.js|js-base64|weibo-pattlock)/,
           use: [
@@ -74,12 +78,12 @@ function config(options){
       ]
     },
     plugins: [
+      new VueLoaderPlugin(),
       // dll
       new webpack.DllReferencePlugin({
         context: __dirname,
         manifest: manifest
       }),
-      new VueLoaderPlugin(),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
     ]
   };

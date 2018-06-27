@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssets = require('optimize-css-assets-webpack-plugin');
 const config = require('./webpack.config');
+const cssConfig = require('./css.config');
 const sassConfig = require('./sass.config');
 
 /* 合并配置 */
@@ -17,15 +18,19 @@ module.exports = config({
     rules: [
       { // sass
         test: /^.*\.s(a|c)ss$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', sassConfig]
+        oneOf: [
+          {
+            resourceQuery: /scoped/,
+            use: [MiniCssExtractPlugin.loader, 'css-loader', sassConfig]
+          },
+          {
+            use: [MiniCssExtractPlugin.loader, cssConfig, sassConfig]
+          }
+        ]
       },
       { // css
         test: /^.*\.css$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
-      },
-      { // vue
-        test: /^.*\.vue$/,
-        use: ['vue-loader']
       }
     ]
   },
