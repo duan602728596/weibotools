@@ -11,8 +11,8 @@ const sassConfig = require('./sass.config');
 module.exports = config({
   output: {
     path: path.join(__dirname, '../build'),
-    filename: 'script/[name]_[chunkhash].js',
-    chunkFilename: 'script/[name]_[chunkhash]_chunk.js'
+    filename: 'script/[name].[chunkhash].js',
+    chunkFilename: 'script/[name].[chunkhash]_chunk.js'
   },
   module: {
     rules: [
@@ -46,8 +46,8 @@ module.exports = config({
       }
     }),
     new MiniCssExtractPlugin({
-      filename: 'style/[name]_[chunkhash].css',
-      chunkFilename: 'style/[name]_[chunkhash]_chunk.css'
+      filename: 'style/[name].[chunkhash].css',
+      chunkFilename: 'style/[name].[chunkhash].chunk.css'
     }),
     new OptimizeCssAssets()
   ]
