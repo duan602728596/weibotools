@@ -57,7 +57,8 @@ export function chaohuaListData(rawArray: Array): Array{
  * @param { string } containerid
  *
  * todo: 未来签到接口可能变化，旧接口目前仍然可以签到，暂时全部返回100000状态，无论是否签到成功
- * 新接口使用 【POST：https://m.weibo.cn/api/container/button?sign=686d57&request_url=http%3A%2F%2Fi.huati.weibo.com%2Fmobile%2Fsuper%2Factive_checkin%3Fpageid%3D10080848fab43dc8c0cce225e66ce7109d399c】接口，
+ * 新接口使用 【POST：https://m.weibo.cn/api/container/button?sign=686d57&request_url=http%3A%2F%2Fi.huati.weibo.com%2Fmobile
+ * %2Fsuper%2Factive_checkin%3Fpageid%3D10080848fab43dc8c0cce225e66ce7109d399c】接口，
  * 地址来自于超话地址的pageInfo.toolbar_menus[0].params.action
  */
 export function checkIn(cookie: string, containerid: string): Promise{
@@ -84,7 +85,7 @@ export function checkIn(cookie: string, containerid: string): Promise{
 }
 
 /**
- * 避免过于请求的点赞，所以进行了延迟15s
+ * 避免过于请求的点赞，所以进行了延迟
  * @param { number } time
  */
 export function yanChi(time: number): Promise{
