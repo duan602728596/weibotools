@@ -9,4 +9,5 @@ html
     div.vue-app#vue-app(data-app)
     script(type='text/javascript' src=require('js-base64/base64.min'))
     script(type='text/javascript' src=require('./weibo-pattlock'))
-    script(type='text/javascript' src=require('../.dll/dll'))
+    if process.env.NODE_ENV === 'development'
+      script(type='text/javascript' src=require('../.dll/dll'))

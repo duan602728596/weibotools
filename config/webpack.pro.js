@@ -12,7 +12,7 @@ module.exports = config({
   output: {
     path: path.join(__dirname, '../build'),
     filename: 'script/[name].[chunkhash].js',
-    chunkFilename: 'script/[name].[chunkhash]_chunk.js'
+    chunkFilename: 'script/[name].[chunkhash].js'
   },
   module: {
     rules: [
@@ -47,8 +47,14 @@ module.exports = config({
     }),
     new MiniCssExtractPlugin({
       filename: 'style/[name].[chunkhash].css',
-      chunkFilename: 'style/[name].[chunkhash].chunk.css'
+      chunkFilename: 'style/[name].[chunkhash].css'
     }),
     new OptimizeCssAssets()
-  ]
+  ],
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      automaticNameDelimiter: '.'
+    }
+  }
 });
