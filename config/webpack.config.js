@@ -1,5 +1,5 @@
-const path = require('path');
 const process = require('process');
+const path = require('path');
 const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const babelConfig = require('./babel.config');
