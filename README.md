@@ -21,5 +21,4 @@ Pug + Scss + ECMAScript + Vue + Element + Webpack + Electron。
 * 输入命令 `$ npm build` 编译到文件夹。
 * 输入命令 `$ npm run asar` 编译asar文件。
 * 输入命令 `$ npm run devdll` 编译开发环境dll文件。
-* 输入命令 `$ npm run prodll` 编译生产环境编译dll文件。
 * 输入命令 `$ npm run npmi` 或 `$ yarn run yarni` 安装生产环境依赖。
