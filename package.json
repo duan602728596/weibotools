@@ -29,7 +29,6 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.54",
     "@babel/plugin-proposal-optional-chaining": "^7.0.0-beta.54",
     "@babel/preset-flow": "^7.0.0-beta.54",
-    "@babel/preset-react": "^7.0.0-beta.54",
     "asar": "^0.14.3",
     "babel-eslint": "^9.0.0-beta.3",
     "babel-loader": "^8.0.0-beta.4",
