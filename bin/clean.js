@@ -1,4 +1,4 @@
-/* 删除文件的脚本 */
+/* 文件处理 */
 const fs = require('fs');
 const path = require('path');
 
@@ -81,16 +81,6 @@ function mkdir(filePath){
 
 (async function(){
   try{
-    // 删除dll文件
-    const scriptsPath = path.resolve(__dirname, '../build/script');
-    const scripts = await readdir(scriptsPath);
-    for(let i = 0, j = scripts.length; i < j; i++){
-      const item = scripts[i];
-      if(/^dll\./.test(item)){
-        await unlink(path.resolve(scriptsPath, item));
-        break;
-      }
-    }
     // 移动file文件
     const build = path.resolve(__dirname, '../build');
     const filePath = path.resolve(__dirname, '../file');
@@ -100,7 +90,7 @@ function mkdir(filePath){
     for(let i = 0, j = files.length; i < j; i++){
       const item = files[i];
       const old = path.resolve(filePath, item);
-      const new1 = path.resolve(buildFile, item);  
+      const new1 = path.resolve(buildFile, item);
       await rename(old, new1);
     }
     await rmdir(filePath);
