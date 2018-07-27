@@ -7,7 +7,7 @@
     "runel": "cross-env NODE_ENV=development electron .",
     "asar": "asar pack ../asar ../app.asar",
     "start": "npm run cleanbuild && cross-env NODE_ENV=development webpack --config ./config/webpack.dev.js --watch",
-    "build": "npm run cleanbuild && cross-env NODE_ENV=production webpack --config ./config/webpack.pro.js --progress",
+    "build": "npm run cleanbuild && cross-env NODE_ENV=production webpack --config ./config/webpack.pro.js --progress && node ./bin/clean.js",
     "cleanbuild": "rimraf ./build",
     "devdll": "cross-env NODE_ENV=development webpack --config ./config/webpack.dll.js --progress",
     "npmi": "npm install --production",
