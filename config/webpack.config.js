@@ -1,6 +1,7 @@
 const process = require('process');
 const path = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const babelConfig = require('./babel.config');
 
@@ -77,6 +78,12 @@ function config(options){
       ]
     },
     plugins: [
+      // html模板
+      new HtmlWebpackPlugin({
+        inject: true,
+        template: path.join(__dirname, '../src/index.pug'),
+        NODE_ENV: process.env.NODE_ENV
+      }),
       new VueLoaderPlugin(),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
     ]
