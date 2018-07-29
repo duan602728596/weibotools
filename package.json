@@ -1,6 +1,6 @@
 {
   "name": "weibo-auto-check-in-tool",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "微博超话自动签到、自动点赞工具。",
   "license": "GNU General Public License v3.0",
   "scripts": {
@@ -22,13 +22,13 @@
     "request": "^2.87.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.54",
-    "@babel/plugin-proposal-decorators": "^7.0.0-beta.54",
-    "@babel/plugin-proposal-do-expressions": "^7.0.0-beta.54",
-    "@babel/plugin-proposal-export-default-from": "^7.0.0-beta.54",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.54",
-    "@babel/plugin-proposal-optional-chaining": "^7.0.0-beta.54",
-    "@babel/preset-flow": "^7.0.0-beta.54",
+    "@babel/core": "^7.0.0-beta.55",
+    "@babel/plugin-proposal-decorators": "^7.0.0-beta.55",
+    "@babel/plugin-proposal-do-expressions": "^7.0.0-beta.55",
+    "@babel/plugin-proposal-export-default-from": "^7.0.0-beta.55",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.55",
+    "@babel/plugin-proposal-optional-chaining": "^7.0.0-beta.55",
+    "@babel/preset-flow": "^7.0.0-beta.55",
     "asar": "^0.14.3",
     "babel-eslint": "^9.0.0-beta.3",
     "babel-loader": "^8.0.0-beta.4",
@@ -37,7 +37,7 @@
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
     "electron": "^2.0.5",
-    "element-ui": "^2.4.4",
+    "element-ui": "^2.4.5",
     "eslint": "^5.2.0",
     "eslint-loader": "^2.1.0",
     "eslint-plugin-flowtype": "^2.50.0",
@@ -62,7 +62,7 @@
     "vue-style-loader": "^4.1.1",
     "vue-template-compiler": "^2.5.16",
     "vuex": "^3.0.1",
-    "webpack": "^4.16.2",
+    "webpack": "^4.16.3",
     "webpack-cli": "^3.1.0"
   },
   "peerDependencies": {
