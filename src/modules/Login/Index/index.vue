@@ -6,7 +6,7 @@
       <router-link class="fr" to="/">
         <el-button type="danger" size="mini" icon="el-icon-circle-close-outline">返回</el-button>
       </router-link>
-      <el-button class="fr mr10" type="primary" size="mini" icon="el-icon-mobile-phone" @click="onDialogDisplay(true)">登录</el-button>
+      <el-button class="fr mr10" type="primary" size="mini" icon="el-icon-mobile-phone" @click="handleDialogDisplay(true)">登录</el-button>
     </div>
     <!-- 表格 -->
     <div class="tablebox">
@@ -15,22 +15,27 @@
         <el-table-column label="登录日期" prop="loginTime"></el-table-column>
         <el-table-column label="操作" prop="handle">
           <template slot-scope="scope">
-            <el-button type="danger" size="mini" icon="el-icon-delete" @click="onDeleteLogin(scope)">删除</el-button>
+            <el-button type="danger" size="mini" icon="el-icon-delete" @click="handleDeleteLogin(scope)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
     <!-- 弹出层 -->
     <el-dialog :visible="visible" title="登录微博账号" :fullscreen="true" :append-to-body="true" :show-close="false">
-      <el-form ref="weiboLogin" :rules="rules" :model="weiboLogin">
-        <el-form-item label="用户名：" prop="username">
-          <el-input v-model="weiboLogin.username"></el-input>
+      <el-form ref="weiboLogin" label-suffix="：" :rules="rules" :model="weiboLogin">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="weiboLogin.username" />
         </el-form-item>
-        <el-form-item label="密码：" prop="password">
-          <el-input v-model="weiboLogin.password" type="password"></el-input>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="weiboLogin.password" type="password" />
         </el-form-item>
-        <el-button class="mr10" type="primary" size="mini" @click="onLogin()">登录</el-button>
-        <el-button type="danger" size="mini" @click="onDialogDisplay(false)">取消</el-button>
+        <el-form-item label="使用验证码登陆">
+          <el-checkbox v-model="weiboLogin.vcode"></el-checkbox>
+        </el-form-item>
+        <div class="btn-box">
+          <el-button class="mr10" type="primary" size="mini" @click="handleLogin()">登录</el-button>
+          <el-button type="danger" size="mini" @click="handleDialogDisplay(false)">取消</el-button>
+        </div>
       </el-form>
     </el-dialog>
   </div>
@@ -41,7 +46,7 @@
   import moment from 'moment';
   import Base64 from 'Base64';
   import hint from 'hint';
-  import config from '../../public/config';
+  import config from '../../../components/config/config';
   import { yanzheng, getCaptcha, yanzhengCaptcha, loginWeibo } from './loginWeibo';
 
   export default {
@@ -62,13 +67,14 @@
         // 表单
         weiboLogin: {
           username: '',
-          password: ''
+          password: '',
+          vcode: false
         }
       };
     },
     methods: {
       // 弹出层显示
-      onDialogDisplay(display: boolean): void{
+      handleDialogDisplay(display: boolean): void{
         this.visible = display;
         if(!display){
           setTimeout((): void=>{
@@ -119,14 +125,14 @@
           }
         });
       },
-      // 登录
-      onLogin(): void{
+      // 验证是否需要验证码
+      handleLogin(): void{
         this.$refs['weiboLogin'].validate(async(valid: boolean): Promise<void>=>{
           if(!valid) return void 0;
           try{
             // 判断是否需要验证码
             const step1: Object = await yanzheng(Base64.encode(this.weiboLogin.username));
-            if(('showpin' in step1 && step1.showpin === 1) || ('smsurl' in step1)){
+            if(('showpin' in step1 && step1.showpin === 1) || ('smsurl' in step1) || this.weiboLogin.vcode === true){
               // 获取验证码
               const step2: Object = await getCaptcha(this.weiboLogin.username);
               hint(step2.path_enc, step2.id);
@@ -163,7 +169,7 @@
         });
       },
       // 删除
-      onDeleteLogin(scope: Object): void{
+      handleDeleteLogin(scope: Object): void{
         const _this: this = this;
         IndexedDB(config.indexeddb.name, config.indexeddb.version, {
           success(event: Event): void{
@@ -218,5 +224,8 @@
   }
   .tablebox {
     margin: 0 10px 10px;
+  }
+  .btn-box {
+    padding: 20px 0;
   }
 </style>
