@@ -7,11 +7,11 @@
         <el-button type="danger" size="mini" icon="el-icon-circle-close">返回</el-button>
       </router-link>
       <el-button class="fr mr10"
-          v-if="btnLoading === false"
-          type="primary"
-          size="mini"
-          icon="el-icon-edit"
-          @click="onCheckin()"
+        v-if="btnLoading === false"
+        type="primary"
+        size="mini"
+        icon="el-icon-edit"
+        @click="onCheckin()"
       >
         一键签到
       </el-button>
@@ -20,8 +20,7 @@
     <!-- 签到列表 -->
     <div class="qiandaobox">
       <el-collapse v-model="activeNames" @change="onQiandaoListChange">
-        <el-collapse-item
-          v-for="item in $store.getters['checkin/getLoginList']()"
+        <el-collapse-item v-for="item in $store.getters['checkin/getLoginList']()"
           :key="item.username"
           :name="item.username"
           :title="title(item.username, item.status)"
@@ -44,7 +43,7 @@
 
 <script type="text/javascript">
   import IndexedDB from 'indexeddb-tools';
-  import config from '../../public/config';
+  import config from '../../../components/config/config';
   import { getChaohuaList, chaohuaListData, checkIn, yanChi } from './checkin';
 
   export default {

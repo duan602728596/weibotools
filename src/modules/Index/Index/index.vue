@@ -3,19 +3,19 @@
     <el-row type="flex">
       <el-col class="group" :xs="8" :sm="8" :md="6" :lg="4" :xl="4">
         <router-link class="imgLink" to="/Login" title="账号登录">
-          <img src="./l1.jpg">
+          <img src="./image/l1.jpg">
         </router-link>
         <router-link to="/Login">账号登录</router-link>
       </el-col>
       <el-col class="group" :xs="8" :sm="8" :md="6" :lg="4" :xl="4">
         <router-link class="imgLink" to="/Checkin" title="一键签到">
-          <img src="./l2.jpg">
+          <img src="./image/l2.jpg">
         </router-link>
         <router-link to="/Checkin">一键签到</router-link>
       </el-col>
       <el-col class="group" :xs="8" :sm="8" :md="6" :lg="4" :xl="4">
         <router-link class="imgLink" to="/Dianzan" title="一键点赞">
-          <img src="./l3.jpg">
+          <img src="./image/l3.jpg">
         </router-link>
         <router-link to="/Checkin">一键点赞</router-link>
       </el-col>
@@ -26,10 +26,10 @@
         <p class="text">扫一扫，打赏一下可怜的作者。嘤嘤嘤...</p>
         <el-row>
           <el-col :span="12">
-            <img class="shoukuan" src="./wx.jpg">
+            <img class="shoukuan" src="./image/wx.jpg">
           </el-col>
           <el-col :span="12">
-            <img class="shoukuan" src="./zfb.jpg">
+            <img class="shoukuan" src="./image/zfb.jpg">
           </el-col>
         </el-row>
       </div>

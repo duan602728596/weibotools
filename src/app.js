@@ -4,7 +4,7 @@ import store from './store/store';
 import routers from './router/routers';
 import './common.scss';
 import './element';
-import './modules/public/indexeddb-init';
+import './components/indexedDB/indexeddb-init';
 
 /* app */
 const app: Vue = new Vue({

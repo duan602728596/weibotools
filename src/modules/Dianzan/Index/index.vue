@@ -7,8 +7,8 @@
       <router-link class="fr" to="/">
         <el-button type="danger" size="mini" icon="el-icon-circle-close-outline">返回</el-button>
       </router-link>
-      <el-button class="fr mr10" size="mini" icon="el-icon-circle-plus" @click="onDialogDisplay(true)">添加lfid</el-button>
-      <el-button class="fr mr10" type="primary" size="mini" icon="el-icon-star-on" :loading="btnLoading" @click="onDianzan()">一键点赞</el-button>
+      <el-button class="fr mr10" size="mini" icon="el-icon-circle-plus" @click="handleDialogDisplay(true)">添加lfid</el-button>
+      <el-button class="fr mr10" type="primary" size="mini" icon="el-icon-star-on" :loading="btnLoading" @click="handleDianzan()">一键点赞</el-button>
     </div>
     <!-- 表格 -->
     <div class="tablebox">
@@ -18,7 +18,7 @@
         <el-table-column label="点赞最大页数" prop="page"></el-table-column>
         <el-table-column label="操作" prop="handle">
           <template slot-scope="scope">
-            <el-button type="danger" size="mini" icon="el-icon-delete" @click="onDeleteLfid(scope)">删除</el-button>
+            <el-button type="danger" size="mini" icon="el-icon-delete" @click="handleDeleteLfid(scope)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -35,8 +35,8 @@
         <el-form-item label="点赞最大页数：" prop="page">
           <el-input v-model="addLfid.page"></el-input>
         </el-form-item>
-        <el-button class="mr10" type="primary" size="mini" @click="onAddLfid()">添加</el-button>
-        <el-button type="danger" size="mini" @click="onDialogDisplay(false)">取消</el-button>
+        <el-button class="mr10" type="primary" size="mini" @click="handleAddLfid()">添加</el-button>
+        <el-button type="danger" size="mini" @click="handleDialogDisplay(false)">取消</el-button>
       </el-form>
     </el-dialog>
   </div>
@@ -44,8 +44,8 @@
 
 <script type="text/javascript">
   import IndexedDB from 'indexeddb-tools';
-  import config from '../../public/config';
-  import { getSt } from '../../public/function';
+  import config from '../../../components/config/config';
+  import { getSt } from '../../../utils';
   import { getIndex, dianzan, yanChi } from './dianzan';
 
   export default {
@@ -77,7 +77,7 @@
     },
     methods: {
       // 弹出层显示
-      onDialogDisplay(display: boolean): void{
+      handleDialogDisplay(display: boolean): void{
         this.visible = display;
         if(!display){
           setTimeout((): void=>{
@@ -86,7 +86,7 @@
         }
       },
       // 添加一个lfid
-      onAddLfid(): void{
+      handleAddLfid(): void{
         const _this: this = this;
         this.$refs['addLfid'].validate(async(valid: boolean): Promise<void>=>{
           if(!valid) return void 0;
@@ -123,7 +123,7 @@
         });
       },
       // 删除一个lfid
-      onDeleteLfid(scope: Object): void{
+      handleDeleteLfid(scope: Object): void{
         const _this: this = this;
         IndexedDB(config.indexeddb.name, config.indexeddb.version, {
           success(event: Event): void{
@@ -160,7 +160,7 @@
         });
       },
       // 一键点赞
-      async onDianzan(): Promise<void>{
+      async handleDianzan(): Promise<void>{
         this.btnLoading = true;
         try{
           const loginList: Object[] = await this.getLoginList();
