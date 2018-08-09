@@ -1,6 +1,6 @@
 {
   "name": "weibo-auto-check-in-tool",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "微博超话自动签到、自动点赞工具。",
   "license": "GNU General Public License v3.0",
   "scripts": {
