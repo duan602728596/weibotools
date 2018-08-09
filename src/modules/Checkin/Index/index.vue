@@ -11,7 +11,7 @@
         type="primary"
         size="mini"
         icon="el-icon-edit"
-        @click="onCheckin()"
+        @click="handleAutoCheckinClick()"
       >
         一键签到
       </el-button>
@@ -19,19 +19,28 @@
     </div>
     <!-- 签到列表 -->
     <div class="qiandaobox">
-      <el-collapse v-model="activeNames" @change="onQiandaoListChange">
+      <el-collapse v-model="activeNames">
         <el-collapse-item v-for="item in $store.getters['checkin/getLoginList']()"
           :key="item.username"
           :name="item.username"
           :title="title(item.username, item.status)"
         >
-          <ul class="clearfix" v-if="item.children && item.children.length > 0">
-            <li class="list-item" v-for="item2 in item.children">
+          <ul class="list clearfix" v-if="item.children && item.children.length > 0">
+            <li class="list-item clearfix" v-for="item2 in item.children">
               <img class="list-item-image" :src="item2.pic">
               <b class="list-item-title">{{ item2.title_sub }}</b>
-              <span class="list-item-status-fail" v-if="item2.status === 0">{{ item2.text }}</span>
-              <span class="list-item-status-success" v-else-if="item2.status === 1">{{ item2.text }}</span>
-              <span class="list-item-status" v-else>签到中...</span>
+              <span class="list-item-status" v-if="item2.code === undefined">签到中...</span>
+              <span class="list-item-status-success" v-else-if="item2.code === '100000'">{{ item2.msg }}</span>
+              <span class="list-item-status-fail" v-else>{{ item2.msg }}</span>
+              <el-button class="fr manual-checkin-btn"
+                type="primary"
+                size="mini"
+                title="手动签到"
+                icon="el-icon-edit"
+                :circle="true"
+                v-if="!(item2.code === '100000' || item2.code === 382004)"
+                @click="handleManualCheckinClick(item, item2)"
+              />
             </li>
           </ul>
           <div class="no-data" v-else>暂无数据</div>
@@ -54,16 +63,12 @@
       };
     },
     methods: {
-      // 签到变化
-      onQiandaoListChange(value: string[]): void{
-        this.activeNames = value;
-      },
       // title
       title(username: string, status: ?number): string{
         return `${ username } ${ status === 1 ? '【已签到】' : '' }`;
       },
-      // 签到
-      async onCheckin(): Promise<void>{
+      // 自动签到
+      async handleAutoCheckinClick(): Promise<void>{
         try{
           this.btnLoading = true;
           // 获取超话列表
@@ -86,6 +91,10 @@
               }
             }
             item.children = l;
+            // 修改ui
+            this.$store.dispatch('checkin/loginList', {
+              data: list
+            });
             // 循环签到超话
             const j2: number = item.children.length;
             let i2: number = 0;
@@ -93,22 +102,36 @@
               const item2: Object = item.children[i2];
               const step1: Object = await checkIn(item.cookie, item2.containerid);
               if(step1){
+                let code: ?(number | string) = null;
+                let msg: ?string = null;
                 if(step1.code === '100000'){
                   // 签到成功
-                  item2.status = 1;
-                  item2.text = step1.code;  // res.data.alert_title;
+                  if('error_code' in step1.data){
+                    code = step1.data.error_code;
+                    msg = step1.data.error_msg;
+                  }else{
+                    code = step1.code;
+                    msg = `${ step1.data?.alert_title }，${ step1.data?.alert_subtitle }`;
+                  }
                 }else{
                   // 其他情况
-                  item2.status = 0;
-                  item2.text = step1.code;  // res.msg;
+                  code = step1.code;
+                  msg = step1.msg;
                 }
+                item2.code = code;
+                item2.msg = msg;
                 i2++;
+                // 修改ui
+                this.$store.dispatch('checkin/loginList', {
+                  data: list
+                });
               }else{
                 this.$message.error(`【${ item2.title_sub }】签到失败。正在重新签到该超话...`);
               }
               await yanChi(1500);
             }
             item.status = 1;
+            // 修改ui
             this.$store.dispatch('checkin/loginList', {
               data: list
             });
@@ -118,6 +141,36 @@
           console.error(err);
           this.btnLoading = false;
           this.$message.error('签到失败！');
+        }
+      },
+      // 手动签到
+      async handleManualCheckinClick(item: Object, item2: Object){
+        const step1: Object = await checkIn(item.cookie, item2.containerid);
+        if(step1){
+          let code: ?(number | string) = null;
+          let msg: ?string = null;
+          if(step1.code === '100000'){
+            // 签到成功
+            if('error_code' in step1.data){
+              code = step1.data.error_code;
+              msg = step1.data.error_msg;
+            }else{
+              code = step1.code;
+              msg = `${ step1.data?.alert_title }，${ step1.data?.alert_subtitle }`;
+            }
+          }else{
+            // 其他情况
+            code = step1.code;
+            msg = step1.msg;
+          }
+          item2.code = code;
+          item2.msg = msg;
+          // 修改ui
+          this.$store.dispatch('checkin/loginList', {
+            data: this.$store.getters['checkin/getLoginList']()
+          });
+        }else{
+          this.$message.error(`【${ item2.title_sub }】签到失败。`);
         }
       }
     },
@@ -136,6 +189,10 @@
               _this.$store.dispatch('checkin/loginList', {
                 data: results
               });
+              // 修改activeNames
+              for(const item: Object of results){
+                _this.activeNames.push(item.username);
+              }
               this.close();
             }
           });
@@ -168,11 +225,26 @@
     font-size: 12px;
     color: #9b9b9b;
   }
+  .manual-checkin-btn {
+    margin-top: 6px;
+  }
+
+  $border: 1px solid #ebeef5;
+  .list {
+    border-top: $border;
+    border-left: $border;
+    border-right: $border;
+  }
   .list-item {
     box-sizing: border-box;
+    float: left;
     padding: 5px;
     width: 50%;
-    float: left;
+    line-height: 0;
+    border-bottom: $border;
+    &:nth-of-type(odd) {
+      border-right: $border;
+    }
     &-image {
       width: 40px;
       height: 40px;

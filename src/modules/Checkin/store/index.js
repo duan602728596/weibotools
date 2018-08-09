@@ -8,7 +8,7 @@ export default {
   },
   mutations: {
     loginList(state: Object, payload: Object): void{
-      state.loginList = payload.data;
+      state.loginList = [...payload.data];
     }
   },
   actions: {

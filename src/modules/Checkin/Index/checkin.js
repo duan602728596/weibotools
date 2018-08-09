@@ -42,9 +42,7 @@ export function chaohuaListData(rawArray: Array): Array{
       list.push({
         pic: value.pic,
         title_sub: value.title_sub,
-        containerid,
-        status: null,     // 签到状态，0：已签到，1：签到成功
-        text: null        // 文字
+        containerid
       });
     }
   });
@@ -56,7 +54,7 @@ export function chaohuaListData(rawArray: Array): Array{
  * @param { string } cookie
  * @param { string } containerid
  *
- * todo: 未来签到接口可能变化，旧接口目前仍然可以签到，暂时全部返回100000状态，无论是否签到成功
+ * TODO: 微博已恢复旧签到接口的状态，旧接口可以放心使用
  * 新接口使用 【POST：https://m.weibo.cn/api/container/button?sign=686d57&request_url=http%3A%2F%2Fi.huati.weibo.com%2Fmobile
  * %2Fsuper%2Factive_checkin%3Fpageid%3D10080848fab43dc8c0cce225e66ce7109d399c】接口，
  * 地址来自于超话地址的pageInfo.toolbar_menus[0].params.action
