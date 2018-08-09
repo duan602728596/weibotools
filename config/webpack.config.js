@@ -6,8 +6,12 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const babelConfig = require('./babel.config');
 
 function config(options){
+  const { NODE_ENV } = process.env;
+  const isDevelopment = NODE_ENV === 'development';
+  const fileName = isDevelopment ? '[name].[ext]' : '[hash:5].[ext]';
   const conf = {
-    mode: process.env.NODE_ENV,
+    mode: NODE_ENV,
+    devtool: isDevelopment ? 'cheap-module-source-map' : 'none',
     entry: {
       app: [path.join(__dirname, '../src/app.js')]
     },
@@ -32,7 +36,7 @@ function config(options){
             {
               loader: 'file-loader',
               options: {
-                name: '[name].[hash:5].[ext]',
+                name: fileName,
                 outputPath: 'script/'
               }
             }
@@ -45,7 +49,7 @@ function config(options){
               loader: 'url-loader',
               options: {
                 limit: 3000,
-                name: '[name].[hash:5].[ext]',
+                name: fileName,
                 outputPath: 'image/',
               }
             }
@@ -57,8 +61,8 @@ function config(options){
             {
               loader: 'file-loader',
               options: {
-                name: '[name].[hash:5].[ext]',
-                outputPath: process.env.NODE_ENV === 'development' ? 'file/' : '../file/'
+                name: fileName,
+                outputPath: isDevelopment ? 'file/' : '../file/'
               }
             }
           ]
@@ -69,7 +73,7 @@ function config(options){
             {
               loader: 'pug-loader',
               options: {
-                pretty: process.env.NODE_ENV === 'development',
+                pretty: isDevelopment,
                 name: '[name].html'
               }
             }
@@ -82,7 +86,7 @@ function config(options){
       new HtmlWebpackPlugin({
         inject: true,
         template: path.join(__dirname, '../src/index.pug'),
-        NODE_ENV: process.env.NODE_ENV
+        NODE_ENV
       }),
       new VueLoaderPlugin(),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
@@ -93,7 +97,6 @@ function config(options){
   conf.module.rules = conf.module.rules.concat(options.module.rules);       // 合并rules
   conf.plugins = conf.plugins.concat(options.plugins);                      // 合并插件
   conf.output = options.output;                                             // 合并输出目录
-  if('devtool' in options) conf.devtool = options.devtool;                  // 合并source-map配置
   if('optimization' in options) conf.optimization = options.optimization;   // 合并optimization
 
   return conf;
