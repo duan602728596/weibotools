@@ -1,3 +1,4 @@
+const axios: Object = global.require('axios');
 const request: Function = global.require('request');
 
 /**
@@ -6,20 +7,7 @@ const request: Function = global.require('request');
  * @param { number } page
  */
 export function getIndex(lfid: string, page: number = 1): Promise{
-  return new Promise((resolve: Function, reject: Function): void=>{
-    request({
-      uri: `https://m.weibo.cn/api/container/getIndex?containerid=${ lfid }&page=${ page }`,
-      method: 'GET'
-    }, (err: any, res: Object, data: string): void=>{
-      if(err){
-        reject(err);
-      }else{
-        resolve(JSON.parse(data));
-      }
-    });
-  }).catch((err: any): void=>{
-    console.error(err);
-  });
+  return axios.get(`https://m.weibo.cn/api/container/getIndex?containerid=${ lfid }&page=${ page }`);
 }
 
 /**
@@ -46,20 +34,6 @@ export function dianzan(cookie: string, id: string, st: string): Promise{
         resolve(JSON.parse(data));
       }
     });
-  }).catch((err: any): void=>{
-    console.error(err);
-  });
-}
-
-/**
- * 避免过于请求的点赞，所以进行了延迟15s
- * @param { number } time
- */
-export function yanChi(time: number): Promise{
-  return new Promise((resolve: Function, reject: Function): void=>{
-    setTimeout((): void=>{
-      resolve();
-    }, time);
   }).catch((err: any): void=>{
     console.error(err);
   });

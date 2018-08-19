@@ -1,6 +1,6 @@
 import { jsonp } from '../../../utils';
 const queryString: Object = global.require('querystring');
-const request: Object = global.require('request');
+const request: Function = global.require('request');
 
 // 判断是否需要验证码
 export function prelogin(usernameBase64: string): Promise{

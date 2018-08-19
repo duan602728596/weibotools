@@ -45,8 +45,8 @@
 <script type="text/javascript">
   import IndexedDB from 'indexeddb-tools';
   import config from '../../../components/config/config';
-  import { getSt } from '../../../utils';
-  import { getIndex, dianzan, yanChi } from './dianzan';
+  import { sleep, getSt } from '../../../utils';
+  import { getIndex, dianzan } from './request';
 
   export default {
     data(): Object{
@@ -179,14 +179,15 @@
             let cards: Object[] = [];
             // 获取信息
             for(let p: number = 1, q: number = Number(item.page); p <= q; p++){
-              const list: Object = await getIndex(item.lfid, p);
-              const cds: Object[] = list?.data?.cards || [];
+              const step1: Object = await getIndex(item.lfid, p);
+              const cds: Object[] = step1.data?.data?.cards || [];
               if(cds.length === 0){
                 break;
               }else{
                 cards = cards.concat(cds);
               }
             }
+
             // 循环点赞
             for(let l: number = 0, m: number = cards.length; l < m; l++){
               const item2: Object = cards[l];
@@ -194,12 +195,11 @@
                 for(let n: number = 0; n < k; n++){
                   const item3: Object = loginList[n];
                   const step: Object = await dianzan(item3.cookie, item2.mblog.id, item3.st);
-                  console.log(step);
-                  await yanChi(3000);
+                  await sleep(3000);
                 }
               }
             }
-            await yanChi(8000);
+            await sleep(8000);
           }
           this.btnLoading = false;
         }catch(err){

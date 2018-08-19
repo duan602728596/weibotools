@@ -37,6 +37,14 @@ export function jsonp(uri: string): Promise{
   });
 }
 
+export function sleep(time: number = 0): Promise{
+  return new Promise((resolve: Function, reject: Function): void=>{
+    setTimeout((): void=>{
+      resolve();
+    }, time);
+  });
+}
+
 /**
  * 获取st
  * @param { string } cookie

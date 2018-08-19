@@ -27,7 +27,7 @@ const routers: VueRouter = new VueRouter({
     },
     {
       path: '/Dianzan',
-      name: 'dianzan',
+      name: 'request',
       component: Dianzan
     }
   ]
