@@ -17,6 +17,7 @@
     </el-header>
     <!-- 表格 -->
     <el-main>
+      <p>账号过半个月左右要重新登陆一下，避免过期。</p>
       <el-table :data="$store.getters['login/getLoginList']()" size="mini">
         <el-table-column label="账号" prop="username"></el-table-column>
         <el-table-column label="密码" prop="password"></el-table-column>

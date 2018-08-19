@@ -3,7 +3,6 @@
     <!-- 顶部菜单 -->
     <el-header class="clearfix" :class="publicStyle.header">
       <h4 :class="publicStyle.fl">一键点赞</h4>
-      <p :class="publicStyle.fl">（每次点赞间隔3秒）</p>
       <router-link :class="publicStyle.fr" to="/">
         <el-button type="danger" size="mini" icon="el-icon-circle-close-outline">返回</el-button>
       </router-link>
@@ -25,19 +24,28 @@
     </el-header>
     <!-- 表格 -->
     <el-main :class="publicStyle.main">
+      <p>为了避免被微博判断为操作次数频繁，每次点赞间隔3秒。</p>
       <el-table :data="$store.getters['dianzan/getLfidList']()" size="mini">
         <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="lfid" prop="lfid"></el-table-column>
         <el-table-column label="点赞最大页数" prop="page"></el-table-column>
         <el-table-column label="操作" prop="handle">
           <template slot-scope="scope">
-            <el-button type="danger" size="mini" icon="el-icon-delete" @click="handleDeleteLfidClick(scope)">删除</el-button>
+            <el-button-group>
+              <el-button size="mini" @click="handleEditLfidClick(scope)">修改</el-button>
+              <el-button type="danger" size="mini" icon="el-icon-delete" @click="handleDeleteLfidClick(scope)">删除</el-button>
+            </el-button-group>
           </template>
         </el-table-column>
       </el-table>
     </el-main>
     <!-- 弹出层 -->
-    <el-dialog :visible="visible" title="添加lfid" :fullscreen="true" :append-to-body="true" :show-close="false">
+    <el-dialog :visible="visible"
+      :title="(this.isEdit ? '修改' : '添加') + 'lfid'"
+      :fullscreen="true"
+      :append-to-body="true"
+      :show-close="false"
+    >
       <el-form ref="addLfid" :rules="rules" :model="addLfid">
         <el-form-item label="名称：" prop="name">
           <el-input v-model="addLfid.name"></el-input>
@@ -48,7 +56,9 @@
         <el-form-item label="点赞最大页数：" prop="page">
           <el-input v-model="addLfid.page"></el-input>
         </el-form-item>
-        <el-button :class="publicStyle.mr10" type="primary" size="mini" @click="handleAddLfidClick()">添加</el-button>
+        <el-button :class="publicStyle.mr10" type="primary" size="mini" @click="handleChangeLfidClick()">
+          {{ this.isEdit ? '修改' : '添加' }}
+        </el-button>
         <el-button type="danger" size="mini" @click="handleDialogDisplayClick(false)">取消</el-button>
       </el-form>
     </el-dialog>
@@ -84,6 +94,7 @@
             message: '请输入点赞最大页数！'
           }
         },
+        isEdit: false, // 是否为编辑模式
         addLfid: {
           name: '',
           lfid: '',
@@ -94,15 +105,28 @@
     methods: {
       // 弹出层显示
       handleDialogDisplayClick(display: boolean): void{
+        this.isEdit = false;
         this.visible = display;
-        if(!display){
-          setTimeout((): void=>{
-            this.$refs['addLfid'].resetFields();
-          }, 100);
+        if(display){
+          this.addLfid = {
+            name: '',
+            lfid: '',
+            page: '1'
+          };
+          this.$refs['addLfid'].resetFields();
         }
       },
-      // 添加一个lfid
-      handleAddLfidClick(): void{
+      // 修改lfid
+      handleEditLfidClick(scope: Object): void{
+        const { row }: { row: Object } = scope;
+        this.addLfid.name = row.name;
+        this.addLfid.lfid = row.lfid;
+        this.addLfid.page = row.page;
+        this.isEdit = true;
+        this.visible = true;
+      },
+      // 添加或修改一个lfid
+      handleChangeLfidClick(): void{
         const _this: this = this;
         this.$refs['addLfid'].validate(async(valid: boolean): Promise<void>=>{
           if(!valid) return void 0;
@@ -132,7 +156,7 @@
               _this.$store.dispatch('dianzan/lfidList', {
                 data: list
               });
-              _this.$refs['addLfid'].resetFields();
+              if(!_this.isEdit) _this.$refs['addLfid'].resetFields(); // 如果是编辑模式，不重置表单
               this.close();
             }
           });

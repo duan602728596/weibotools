@@ -8,7 +8,7 @@ export default {
   },
   mutations: {
     lfidList(state: Object, payload: Object): void{
-      state.lfidList = payload.data;
+      state.lfidList = [...payload.data];
     },
     deleteLfid(state: Object, payload: Object): void{
       state.lfidList.splice(payload.index, 1);

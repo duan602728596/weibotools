@@ -131,34 +131,39 @@
         });
         return list;
       },
+      // 获取超级话题列表
+      async getChaohuaList(item: Object): Promise<void>{
+        let l: Array = [];
+        let sinceId: ?string = null;
+        let isBreak: ?boolean = true;
+        // 循环获取超话
+        while(isBreak){
+          const step1: Object = await getChaohuaList(item.cookie, sinceId);
+          const cardlistInfo: Object = step1.data.cardlistInfo;
+          const card_group: Object = step1.data.cards[0].card_group;
+          l = l.concat(this.chaohuaListData(card_group)); // 循环card_group，提取数据
+          if('since_id' in cardlistInfo){
+            sinceId = cardlistInfo.since_id;
+          }else{
+            isBreak = false;
+          }
+        }
+        item.children = l;
+      },
       // 自动签到
       async handleAutoCheckinClick(): Promise<void>{
         try{
           this.btnLoading = true;
-          // 获取超话列表
           const list: [] = this.$store.getters['checkin/getLoginList']();
           for(let i: number = 0, j: number = list.length; i < j; i++){
             const item: Object = list[i];
-            let l: Array = [];
-            let sinceId: ?string = null;
-            let isBreak: ?boolean = true;
-            // 循环获取超话
-            while(isBreak){
-              const step1: Object = await getChaohuaList(item.cookie, sinceId);
-              const cardlistInfo: Object = step1.data.cardlistInfo;
-              const card_group: Object = step1.data.cards[0].card_group;
-              l = l.concat(this.chaohuaListData(card_group)); // 循环card_group，提取数据
-              if('since_id' in cardlistInfo){
-                sinceId = cardlistInfo.since_id;
-              }else{
-                isBreak = false;
-              }
-            }
-            item.children = l;
+            // 获取超级话题列表
+            if(!('children' in item)) await this.getChaohuaList(item);
             // 修改ui
             this.$store.dispatch('checkin/loginList', {
               data: list
             });
+            // 签到
             await this.checkIn(item, list);
             item.status = 1;
             // 修改ui
