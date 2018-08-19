@@ -62,6 +62,7 @@
   import IndexedDB from 'indexeddb-tools';
   import config from '../../../components/config/config';
   import publicStyle from '../../../components/publicStyle/publicStyle.scss';
+  import { loginList } from '../../../components/indexedDB/select';
   import { getChaohuaList, checkIn } from './request';
   import { sleep } from '../../../utils';
 
@@ -205,29 +206,9 @@
         }
       }
     },
-    mounted(): void{
-      const _this: this = this;
-      IndexedDB(config.indexeddb.name, config.indexeddb.version, {
-        success(event: Event): void{
-          const store: Object = this.getObjectStore(config.indexeddb.objectStore[0].name, true);
-          const results: [] = [];
-          store.cursor(config.indexeddb.objectStore[0].key[1], (event2: Event): void=>{
-            const result: Object = event2.target.result;
-            if(result){
-              results.push(result.value);
-              result.continue();
-            }else{
-              _this.$store.dispatch('checkin/loginList', {
-                data: results
-              });
-              // 修改activeNames
-              for(const item: Object of results){
-                _this.activeNames.push(item.username);
-              }
-              this.close();
-            }
-          });
-        }
+    async mounted(): Promise<void>{
+      this.$store.dispatch('checkin/loginList', {
+        data: await loginList()
       });
     }
   };

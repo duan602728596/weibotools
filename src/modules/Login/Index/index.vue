@@ -58,6 +58,7 @@
   import moment from 'moment';
   import hint from 'hint';
   import config from '../../../components/config/config';
+  import { loginList } from '../../../components/indexedDB/select';
   import publicStyle from '../../../components/publicStyle/publicStyle.scss';
   import { prelogin, pattern, verify, login } from './request';
 
@@ -208,25 +209,9 @@
         });
       }
     },
-    mounted(): void{
-      const _this: this = this;
-      IndexedDB(config.indexeddb.name, config.indexeddb.version, {
-        success(event: Event): void{
-          const store: Object = this.getObjectStore(config.indexeddb.objectStore[0].name, true);
-          const results: [] = [];
-          store.cursor(config.indexeddb.objectStore[0].key[1], (event2: Event): void=>{
-            const result: Object = event2.target.result;
-            if(result){
-              results.push(result.value);
-              result.continue();
-            }else{
-              _this.$store.dispatch('login/loginList', {
-                data: results
-              });
-              this.close();
-            }
-          });
-        }
+    async mounted(): Promise<void>{
+      this.$store.dispatch('login/loginList', {
+        data: await loginList()
       });
     }
   };
