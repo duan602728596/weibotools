@@ -194,12 +194,12 @@
               if(item2.card_type === 9){
                 for(let n: number = 0; n < k; n++){
                   const item3: Object = loginList[n];
-                  const step: Object = await dianzan(item3.cookie, item2.mblog.id, item3.st);
+                  await dianzan(item3.cookie, item2.mblog.id, item3.st);
                   await sleep(3000);
                 }
               }
             }
-            await sleep(8000);
+            await sleep(3000);
           }
           this.btnLoading = false;
         }catch(err){
