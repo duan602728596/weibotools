@@ -1,8 +1,8 @@
 /* element按需加载 */
 import Vue from 'vue/dist/vue';
 import {
-  Row, Col, Container, Header, Main, Button, ButtonGroup, Table, TableColumn, Dialog, Form, FormItem,
-  Input, Message, Collapse, CollapseItem, Checkbox
+  Row, Col, Container, Header, Main, Button, ButtonGroup, Table, TableColumn, Dialog, Form, FormItem, Input, Message,
+  Collapse, CollapseItem, Checkbox, Select, Option, Loading
 } from 'element-ui';
 
 Vue.use(Row);
@@ -21,5 +21,8 @@ Vue.use(Input);
 Vue.use(Collapse);
 Vue.use(CollapseItem);
 Vue.use(Checkbox);
+Vue.use(Select);
+Vue.use(Option);
+Vue.use(Loading);
 
 Vue.prototype.$message = Message;

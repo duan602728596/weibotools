@@ -1,9 +1,6 @@
 import Vue from 'vue/dist/vue';
 import VueRouter from 'vue-router/dist/vue-router';
 import Index from '../modules/Index/Index/index.vue';
-import Login from 'bundle-loader?lazy&name=login!../modules/Login/Index/index.vue';
-import Checkin from 'bundle-loader?lazy&name=check_in!../modules/Checkin/Index/index.vue';
-import Dianzan from 'bundle-loader?lazy&name=dian_zan!../modules/Dianzan/Index/index.vue';
 
 Vue.use(VueRouter);
 
@@ -18,17 +15,22 @@ const routers: VueRouter = new VueRouter({
     {
       path: '/Login',
       name: 'login',
-      component: Login
+      component: (): Promise => import('../modules/Login/Index/index.vue')
     },
     {
       path: '/Checkin',
       name: 'checkin',
-      component: Checkin
+      component: (): Promise => import('../modules/Checkin/Index/index.vue')
     },
     {
       path: '/Dianzan',
-      name: 'request',
-      component: Dianzan
+      name: 'dianzan',
+      component: (): Promise => import('../modules/Dianzan/Index/index.vue')
+    },
+    {
+      path: '/FriendShip',
+      name: 'friendship',
+      component: (): Promise => import('../modules/FriendShip/Index/index.vue')
     }
   ]
 });

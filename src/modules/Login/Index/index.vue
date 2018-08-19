@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <!-- 顶部菜单 -->
-    <el-header class="clearfix" :class="publicStyle.header">
+    <el-header :class="classNames(publicStyle.header, 'clearfix')">
       <h4 :class="publicStyle.fl">账号登录</h4>
       <router-link :class="publicStyle.fr" to="/">
         <el-button type="danger" size="mini" icon="el-icon-circle-close-outline">返回</el-button>

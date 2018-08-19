@@ -1,7 +1,7 @@
 export default {
   namespaced: true,
   state: {
-    loginList: []  // 账号登录列表
+    loginList: [] // 账号登录列表
   },
   getters: {
     getLoginList: (state: Object): Function => (): Array => state.loginList
