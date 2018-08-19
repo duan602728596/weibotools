@@ -1,17 +1,30 @@
 <template>
-  <div>
+  <el-container>
     <!-- 顶部菜单 -->
-    <div class="toolsbox clearfix">
-      <h4 class="fl">一键点赞</h4>
-      <p class="fl">（每次点赞间隔3秒）</p>
-      <router-link class="fr" to="/">
+    <el-header class="clearfix" :class="publicStyle.header">
+      <h4 :class="publicStyle.fl">一键点赞</h4>
+      <p :class="publicStyle.fl">（每次点赞间隔3秒）</p>
+      <router-link :class="publicStyle.fr" to="/">
         <el-button type="danger" size="mini" icon="el-icon-circle-close-outline">返回</el-button>
       </router-link>
-      <el-button class="fr mr10" size="mini" icon="el-icon-circle-plus" @click="handleDialogDisplayClick(true)">添加lfid</el-button>
-      <el-button class="fr mr10" type="primary" size="mini" icon="el-icon-star-on" :loading="btnLoading" @click="handleDianzan()">一键点赞</el-button>
-    </div>
+      <el-button :class="classNames(publicStyle.fr, publicStyle.mr10)"
+        size="mini" icon="el-icon-circle-plus"
+        @click="handleDialogDisplayClick(true)"
+      >
+        添加lfid
+      </el-button>
+      <el-button :class="classNames(publicStyle.fr, publicStyle.mr10)"
+        type="primary"
+        size="mini"
+        icon="el-icon-star-on"
+        :loading="btnLoading"
+        @click="handleDianzanClick()"
+      >
+        一键点赞
+      </el-button>
+    </el-header>
     <!-- 表格 -->
-    <div class="tablebox">
+    <el-main :class="publicStyle.main">
       <el-table :data="$store.getters['dianzan/getLfidList']()" size="mini">
         <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="lfid" prop="lfid"></el-table-column>
@@ -22,7 +35,7 @@
           </template>
         </el-table-column>
       </el-table>
-    </div>
+    </el-main>
     <!-- 弹出层 -->
     <el-dialog :visible="visible" title="添加lfid" :fullscreen="true" :append-to-body="true" :show-close="false">
       <el-form ref="addLfid" :rules="rules" :model="addLfid">
@@ -35,22 +48,24 @@
         <el-form-item label="点赞最大页数：" prop="page">
           <el-input v-model="addLfid.page"></el-input>
         </el-form-item>
-        <el-button class="mr10" type="primary" size="mini" @click="handleAddLfidClick()">添加</el-button>
+        <el-button :class="publicStyle.mr10" type="primary" size="mini" @click="handleAddLfidClick()">添加</el-button>
         <el-button type="danger" size="mini" @click="handleDialogDisplayClick(false)">取消</el-button>
       </el-form>
     </el-dialog>
-  </div>
+  </el-container>
 </template>
 
 <script type="text/javascript">
   import IndexedDB from 'indexeddb-tools';
   import config from '../../../components/config/config';
+  import publicStyle from '../../../components/publicStyle/publicStyle.scss';
   import { sleep, getSt } from '../../../utils';
   import { getIndex, dianzan } from './request';
 
   export default {
     data(): Object{
       return {
+        publicStyle,
         visible: false,     // 弹出层
         btnLoading: false,  // 按钮是否加载中
         // 校验规则
@@ -185,7 +200,7 @@
         }
       },
       // 一键点赞
-      async handleDianzan(): Promise<void>{
+      async handleDianzanClick(): Promise<void>{
         this.btnLoading = true;
         try{
           const loginList: Object[] = await this.getLoginList();
@@ -236,23 +251,3 @@
     }
   };
 </script>
-
-<style lang="scss" scoped>
-  .toolsbox {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 10px;
-  }
-  .fl {
-    float: left;
-  }
-  .fr {
-    float: right;
-  }
-  .mr10 {
-    margin-right: 10px;
-  }
-  .tablebox {
-    margin: 0 10px 10px;
-  }
-</style>

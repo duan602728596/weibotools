@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <el-container>
     <!-- 顶部菜单 -->
-    <div class="toolsbox clearfix">
-      <h4 class="fl">账号登录</h4>
-      <router-link class="fr" to="/">
+    <el-header class="clearfix" :class="publicStyle.header">
+      <h4 :class="publicStyle.fl">账号登录</h4>
+      <router-link :class="publicStyle.fr" to="/">
         <el-button type="danger" size="mini" icon="el-icon-circle-close-outline">返回</el-button>
       </router-link>
-      <el-button class="fr mr10"
+      <el-button :class="classNames(publicStyle.fr, publicStyle.mr10)"
         type="primary"
         size="mini"
         icon="el-icon-mobile-phone"
@@ -14,9 +14,9 @@
       >
         登录
       </el-button>
-    </div>
+    </el-header>
     <!-- 表格 -->
-    <div class="tablebox">
+    <el-main>
       <el-table :data="$store.getters['login/getLoginList']()" size="mini">
         <el-table-column label="账号" prop="username"></el-table-column>
         <el-table-column label="密码" prop="password"></el-table-column>
@@ -31,7 +31,7 @@
           </template>
         </el-table-column>
       </el-table>
-    </div>
+    </el-main>
     <!-- 弹出层 -->
     <el-dialog :visible="visible" title="登录微博账号" :fullscreen="true" :append-to-body="true" :show-close="false">
       <el-form ref="weiboLogin" label-suffix="：" :rules="rules" :model="weiboLogin">
@@ -50,7 +50,7 @@
         </div>
       </el-form>
     </el-dialog>
-  </div>
+  </el-container>
 </template>
 
 <script type="text/javascript">
@@ -58,11 +58,13 @@
   import moment from 'moment';
   import hint from 'hint';
   import config from '../../../components/config/config';
+  import publicStyle from '../../../components/publicStyle/publicStyle.scss';
   import { prelogin, pattern, verify, login } from './request';
 
   export default {
     data(): Object{
       return {
+        publicStyle,
         visible: false, // 弹出层
         // 校验规则
         rules: {
@@ -231,23 +233,6 @@
 </script>
 
 <style lang="scss" scoped>
-  .toolsbox {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 10px;
-  }
-  .fl {
-    float: left;
-  }
-  .fr {
-    float: right;
-  }
-  .mr10 {
-    margin-right: 10px;
-  }
-  .tablebox {
-    margin: 0 10px 10px;
-  }
   .btn-box {
     padding: 20px 0;
   }

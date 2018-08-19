@@ -1,12 +1,15 @@
 /* element按需加载 */
 import Vue from 'vue/dist/vue';
 import {
-  Row, Col, Button, ButtonGroup, Table, TableColumn, Dialog, Form, FormItem,
+  Row, Col, Container, Header, Main, Button, ButtonGroup, Table, TableColumn, Dialog, Form, FormItem,
   Input, Message, Collapse, CollapseItem, Checkbox
 } from 'element-ui';
 
 Vue.use(Row);
 Vue.use(Col);
+Vue.use(Container);
+Vue.use(Header);
+Vue.use(Main);
 Vue.use(Button);
 Vue.use(ButtonGroup);
 Vue.use(Table);

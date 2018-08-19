@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <el-container>
     <!-- 顶部菜单 -->
-    <div class="toolsbox clearfix">
-      <h4 class="fl">一键签到</h4>
-      <router-link class="fr" to="/">
+    <el-header class="clearfix" :class="publicStyle.header">
+      <h4 :class="publicStyle.fl">一键签到</h4>
+      <router-link :class="publicStyle.fr" to="/">
         <el-button type="danger" size="mini" icon="el-icon-circle-close">返回</el-button>
       </router-link>
-      <el-button class="fr mr10"
+      <el-button :class="classNames(publicStyle.fr, publicStyle.mr10)"
         v-if="btnLoading === false"
         type="primary"
         size="mini"
@@ -15,10 +15,17 @@
       >
         一键签到
       </el-button>
-      <el-button class="fr mr10" v-else type="primary" size="mini" :loading="btnLoading">签到中...</el-button>
-    </div>
+      <el-button :class="classNames(publicStyle.fr, publicStyle.mr10)"
+        v-else
+        type="primary"
+        size="mini"
+        :loading="btnLoading"
+      >
+        签到中...
+      </el-button>
+    </el-header>
     <!-- 签到列表 -->
-    <div class="qiandaobox">
+    <el-main :class="publicStyle.main">
       <el-collapse v-model="activeNames">
         <el-collapse-item v-for="item in $store.getters['checkin/getLoginList']()"
           :key="item.username"
@@ -32,7 +39,8 @@
               <span class="list-item-status" v-if="item2.code === undefined">签到中...</span>
               <span class="list-item-status-success" v-else-if="item2.code === '100000'">{{ item2.msg }}</span>
               <span class="list-item-status-fail" v-else>{{ item2.msg }}</span>
-              <el-button class="fr manual-checkin-btn"
+              <el-button class="manual-checkin-btn"
+                :class="publicStyle.fr"
                 type="primary"
                 size="mini"
                 title="手动签到"
@@ -46,19 +54,21 @@
           <div class="no-data" v-else>暂无数据</div>
         </el-collapse-item>
       </el-collapse>
-    </div>
-  </div>
+    </el-main>
+  </el-container>
 </template>
 
 <script type="text/javascript">
   import IndexedDB from 'indexeddb-tools';
   import config from '../../../components/config/config';
+  import publicStyle from '../../../components/publicStyle/publicStyle.scss';
   import { getChaohuaList, checkIn } from './request';
   import { sleep } from '../../../utils';
 
   export default {
     data(): Object{
       return {
+        publicStyle,
         activeNames: [],
         btnLoading: false  // 按钮是否加载中
       };
@@ -224,23 +234,6 @@
 </script>
 
 <style lang="scss" scoped>
-  .toolsbox {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 10px;
-  }
-  .fl {
-    float: left;
-  }
-  .fr {
-    float: right;
-  }
-  .mr10 {
-    margin-right: 10px;
-  }
-  .qiandaobox {
-    padding: 0 10px 10px;
-  }
   .no-data {
     text-align: center;
     font-size: 12px;

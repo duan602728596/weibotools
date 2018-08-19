@@ -1,6 +1,7 @@
 import Vue from 'vue/dist/vue';
 import App from './AppModule.vue';
 import store from './store/store';
+import classNames from 'classnames';
 import routers from './router/routers';
 import './common.scss';
 import './element';
@@ -16,3 +17,5 @@ const app: Vue = new Vue({
   },
   template: '<App />'
 });
+
+Vue.prototype.classNames = classNames;
