@@ -6,16 +6,28 @@
       <router-link class="fr" to="/">
         <el-button type="danger" size="mini" icon="el-icon-circle-close-outline">返回</el-button>
       </router-link>
-      <el-button class="fr mr10" type="primary" size="mini" icon="el-icon-mobile-phone" @click="handleDialogDisplay(true)">登录</el-button>
+      <el-button class="fr mr10"
+        type="primary"
+        size="mini"
+        icon="el-icon-mobile-phone"
+        @click="handleDialogDisplayClick(true)"
+      >
+        登录
+      </el-button>
     </div>
     <!-- 表格 -->
     <div class="tablebox">
       <el-table :data="$store.getters['login/getLoginList']()" size="mini">
         <el-table-column label="账号" prop="username"></el-table-column>
-        <el-table-column label="登录日期" prop="loginTime"></el-table-column>
-        <el-table-column label="操作" prop="handle">
+        <el-table-column label="密码" prop="password"></el-table-column>
+        <el-table-column label="登录日期" width="140" prop="loginTime"></el-table-column>
+        <el-table-column label="操作" width="330" prop="handle">
           <template slot-scope="scope">
-            <el-button type="danger" size="mini" icon="el-icon-delete" @click="handleDeleteLogin(scope)">删除</el-button>
+            <el-button-group>
+              <el-button size="mini" @click="handleLoginAgainClick(scope)">重新登录</el-button>
+              <el-button size="mini" @click="handleLoginAgainClick(scope, true)">使用验证码重新登陆</el-button>
+              <el-button type="danger" size="mini" icon="el-icon-delete" @click="handleDeleteLoginClick(scope)">删除</el-button>
+            </el-button-group>
           </template>
         </el-table-column>
       </el-table>
@@ -33,8 +45,8 @@
           <el-checkbox v-model="weiboLogin.vcode"></el-checkbox>
         </el-form-item>
         <div class="btn-box">
-          <el-button class="mr10" type="primary" size="mini" @click="handleLogin()">登录</el-button>
-          <el-button type="danger" size="mini" @click="handleDialogDisplay(false)">取消</el-button>
+          <el-button class="mr10" type="primary" size="mini" @click="handleLoginClick()">登录</el-button>
+          <el-button type="danger" size="mini" @click="handleDialogDisplayClick(false)">取消</el-button>
         </div>
       </el-form>
     </el-dialog>
@@ -51,7 +63,7 @@
   export default {
     data(): Object{
       return {
-        visible: false,   // 弹出层
+        visible: false, // 弹出层
         // 校验规则
         rules: {
           username: {
@@ -73,9 +85,9 @@
     },
     methods: {
       // 弹出层显示
-      handleDialogDisplay(display: boolean): void{
+      handleDialogDisplayClick(display: boolean): void{
         this.visible = display;
-        if(!display){
+        if(display){
           setTimeout((): void=>{
             this.$refs['weiboLogin'].resetFields();
           }, 100);
@@ -95,6 +107,7 @@
             const store: Object = this.getObjectStore(config.indexeddb.objectStore[0].name, true);
             const data: Object = {
               username: _this.weiboLogin.username,
+              password: _this.weiboLogin.password,
               loginTime: moment().format('YYYY-MM-DD HH:mm:ss'),
               cookie: step4.cookie
             };
@@ -117,9 +130,6 @@
               data: list
             });
             _this.visible = false;
-            setTimeout((): void=>{
-              _this.$refs['weiboLogin'].resetFields();
-            }, 100);
             this.close();
           }
         });
@@ -147,30 +157,42 @@
         document.removeEventListener('weibo-pattlock', this._verifyCallback);
         this._verifyCallback = null;
       },
-      // 验证是否需要验证码
-      handleLogin(): void{
-        this.$refs['weiboLogin'].validate(async(valid: boolean): Promise<void>=>{
-          if(!valid) return void 0;
-          try{
-            // 判断是否需要验证码
-            const step1: Object = await prelogin(btoa(this.weiboLogin.username));
-            if(('showpin' in step1 && step1.showpin === 1) || ('smsurl' in step1) || this.weiboLogin.vcode === true){
-              // 获取验证码
-              const step2: Object = await pattern(this.weiboLogin.username);
-              hint(step2.path_enc, step2.id);
-              this._verifyCallback = this.verifyCallback.bind(this, step2);
-              document.addEventListener('weibo-pattlock', this._verifyCallback, false);
-            }else{
-              this.loginWeibo();
-            }
-          }catch(err){
-            console.error(err);
-            this.$message.error('登录失败！');
+      // 登陆、获取验证码
+      async prelogin(): Promise<void>{
+        try{
+          // 判断是否需要验证码
+          const step1: Object = await prelogin(btoa(this.weiboLogin.username));
+          if(('showpin' in step1 && step1.showpin === 1) || ('smsurl' in step1) || this.weiboLogin.vcode === true){
+            // 获取验证码
+            const step2: Object = await pattern(this.weiboLogin.username);
+            hint(step2.path_enc, step2.id);
+            this._verifyCallback = this.verifyCallback.bind(this, step2);
+            document.addEventListener('weibo-pattlock', this._verifyCallback, false);
+          }else{
+            this.loginWeibo();
           }
+        }catch(err){
+          console.error(err);
+          this.$message.error('登录失败！');
+        }
+      },
+      // 登陆、获取验证码
+      handleLoginClick(): void{
+        this.$refs['weiboLogin'].validate((valid: boolean)=>{
+          if(!valid) return void 0;
+          this.prelogin();
         });
       },
+      // 重新登陆
+      handleLoginAgainClick(scope: Object, useVcode: boolean = false): void{
+        const { row }: { row: Object } = scope;
+        this.weiboLogin.username = row.username;
+        this.weiboLogin.password = row.password;
+        this.weiboLogin.vcode = useVcode;
+        this.prelogin();
+      },
       // 删除
-      handleDeleteLogin(scope: Object): void{
+      handleDeleteLoginClick(scope: Object): void{
         const _this: this = this;
         IndexedDB(config.indexeddb.name, config.indexeddb.version, {
           success(event: Event): void{
