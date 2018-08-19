@@ -159,6 +159,31 @@
           console.error(err);
         });
       },
+      // 点赞
+      async dianzanLfid(item: Object, loginList: Array): Promise<void>{
+        let cards: Object[] = [];
+        // 获取信息
+        for(let p: number = 1, q: number = Number(item.page); p <= q; p++){
+          const step1: Object = await getIndex(item.lfid, p);
+          const cds: Object[] = step1.data?.data?.cards || [];
+          if(cds.length === 0){
+            break;
+          }else{
+            cards = cards.concat(cds);
+          }
+        }
+        // 循环点赞
+        for(let l: number = 0, m: number = cards.length, k: number = loginList.length; l < m; l++){
+          const item2: Object = cards[l];
+          if(item2.card_type === 9){
+            for(let n: number = 0; n < k; n++){
+              const item3: Object = loginList[n];
+              await dianzan(item3.cookie, item2.mblog.id, item3.st);
+              await sleep(3000);
+            }
+          }
+        }
+      },
       // 一键点赞
       async handleDianzan(): Promise<void>{
         this.btnLoading = true;
@@ -174,31 +199,10 @@
             loginList[i].st = step.data.data.st;
             loginList[i].cookie += `; ${ step.cookie }`;
           }
-          for(let i: number = 0, j: number = lfidList.length, k: number = loginList.length; i < j; i++){
+          // 循环lfid
+          for(let i: number = 0, j: number = lfidList.length; i < j; i++){
             const item: Object = lfidList[i];
-            let cards: Object[] = [];
-            // 获取信息
-            for(let p: number = 1, q: number = Number(item.page); p <= q; p++){
-              const step1: Object = await getIndex(item.lfid, p);
-              const cds: Object[] = step1.data?.data?.cards || [];
-              if(cds.length === 0){
-                break;
-              }else{
-                cards = cards.concat(cds);
-              }
-            }
-
-            // 循环点赞
-            for(let l: number = 0, m: number = cards.length; l < m; l++){
-              const item2: Object = cards[l];
-              if(item2.card_type === 9){
-                for(let n: number = 0; n < k; n++){
-                  const item3: Object = loginList[n];
-                  await dianzan(item3.cookie, item2.mblog.id, item3.st);
-                  await sleep(3000);
-                }
-              }
-            }
+            await this.dianzanLfid(item, loginList);
             await sleep(3000);
           }
           this.btnLoading = false;

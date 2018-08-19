@@ -53,7 +53,8 @@
 <script type="text/javascript">
   import IndexedDB from 'indexeddb-tools';
   import config from '../../../components/config/config';
-  import { getChaohuaList, chaohuaListData, checkIn, yanChi } from './checkin';
+  import { getChaohuaList, checkIn } from './request';
+  import { sleep } from '../../../utils';
 
   export default {
     data(): Object{
@@ -66,6 +67,60 @@
       // title
       title(username: string, status: ?number): string{
         return `${ username } ${ status === 1 ? '【已签到】' : '' }`;
+      },
+      // 签到
+      async checkIn(item: Object, list: Array): Promise<void>{
+        // 循环签到超话
+        const j2: number = item.children.length;
+        let i2: number = 0;
+        while(i2 < j2){
+          const item2: Object = item.children[i2];
+          const step1: Object = await checkIn(item.cookie, item2.containerid);
+          if(step1){
+            let code: ?(number | string) = null;
+            let msg: ?string = null;
+            if(step1.code === '100000'){
+              // 签到成功
+              if('error_code' in step1.data){
+                code = step1.data.error_code;
+                msg = step1.data.error_msg;
+              }else{
+                code = step1.code;
+                msg = `${ step1.data?.alert_title }，${ step1.data?.alert_subtitle }`;
+              }
+            }else{
+              // 其他情况
+              code = step1.code;
+              msg = step1.msg;
+            }
+            item2.code = code;
+            item2.msg = msg;
+            i2++;
+            // 修改ui
+            this.$store.dispatch('checkin/loginList', {
+              data: list
+            });
+          }else{
+            this.$message.error(`【${ item2.title_sub }】签到失败。正在重新签到该超话...`);
+          }
+          await sleep(1500);
+        }
+      },
+      // 解析超话数据
+      chaohuaListData(rawArray: Array): Array{
+        const list: [] = [];
+        rawArray.forEach((value: Object, index: number, arr: []): void=>{
+          if(value.card_type === 8){
+            const s: string = value.scheme.match(/containerid=[a-zA-Z0-9]+/)[0];
+            const containerid: string = s.split('=')[1];
+            list.push({
+              pic: value.pic,
+              title_sub: value.title_sub,
+              containerid
+            });
+          }
+        });
+        return list;
       },
       // 自动签到
       async handleAutoCheckinClick(): Promise<void>{
@@ -83,7 +138,7 @@
               const step1: Object = await getChaohuaList(item.cookie, sinceId);
               const cardlistInfo: Object = step1.data.cardlistInfo;
               const card_group: Object = step1.data.cards[0].card_group;
-              l = l.concat(chaohuaListData(card_group)); // 循环card_group，提取数据
+              l = l.concat(this.chaohuaListData(card_group)); // 循环card_group，提取数据
               if('since_id' in cardlistInfo){
                 sinceId = cardlistInfo.since_id;
               }else{
@@ -95,41 +150,7 @@
             this.$store.dispatch('checkin/loginList', {
               data: list
             });
-            // 循环签到超话
-            const j2: number = item.children.length;
-            let i2: number = 0;
-            while(i2 < j2){
-              const item2: Object = item.children[i2];
-              const step1: Object = await checkIn(item.cookie, item2.containerid);
-              if(step1){
-                let code: ?(number | string) = null;
-                let msg: ?string = null;
-                if(step1.code === '100000'){
-                  // 签到成功
-                  if('error_code' in step1.data){
-                    code = step1.data.error_code;
-                    msg = step1.data.error_msg;
-                  }else{
-                    code = step1.code;
-                    msg = `${ step1.data?.alert_title }，${ step1.data?.alert_subtitle }`;
-                  }
-                }else{
-                  // 其他情况
-                  code = step1.code;
-                  msg = step1.msg;
-                }
-                item2.code = code;
-                item2.msg = msg;
-                i2++;
-                // 修改ui
-                this.$store.dispatch('checkin/loginList', {
-                  data: list
-                });
-              }else{
-                this.$message.error(`【${ item2.title_sub }】签到失败。正在重新签到该超话...`);
-              }
-              await yanChi(1500);
-            }
+            await this.checkIn(item, list);
             item.status = 1;
             // 修改ui
             this.$store.dispatch('checkin/loginList', {
