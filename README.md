@@ -1,5 +1,13 @@
 # 微博超话自动签到工具
 
+## 功能
+* 超级话题自动签到
+* 自动点赞
+* TODO：批量取关功能
+* TODO：超话自动点赞
+* TODO：一键转发、评论微博
+* TODO：超话微博一键转发、评论
+
 ## 软件下载链接
 进入到[https://github.com/duan602728596/document/blob/master/48/README.md](https://github.com/duan602728596/document/blob/master/48/README.md)下载
 
@@ -7,13 +15,10 @@
 本软件遵循**GNU General Public License v3.0**许可证。
 
 ## 技术栈
-Pug + Scss + ECMAScript + Vue + Element + Webpack + Electron。
+Pug + Sass + ECMAScript + Vue + Element + Webpack + Electron。
 
 ## 微博的lfid查找方法
 [https://github.com/duan602728596/qqtools#微博的lfid查找方法](https://github.com/duan602728596/qqtools#微博的lfid查找方法)
-
-## 注意
-在生产环境编译时，由于配置问题，`file`文件夹会在`build`文件夹外，需要手动剪切到`build`文件夹内。
 
 ## 编译命令
 * 输入命令 `$ npm start` 运行开发环境。

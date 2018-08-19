@@ -4,7 +4,7 @@
   "description": "微博超话自动签到、自动点赞工具。",
   "license": "GNU General Public License v3.0",
   "scripts": {
-    "runel": "cross-env NODE_ENV=development electron .",
+    "runel": "cross-env NODE_ENV=development electron ./",
     "asar": "asar pack ../asar ../app.asar",
     "start": "npm run cleanbuild && cross-env NODE_ENV=development webpack --config ./config/webpack.dev.js --watch",
     "build": "npm run cleanbuild && cross-env NODE_ENV=production webpack --config ./config/webpack.pro.js --progress && node ./bin/file-process.js",
