@@ -59,10 +59,8 @@
 </template>
 
 <script type="text/javascript">
-  import IndexedDB from 'indexeddb-tools';
-  import config from '../../../components/config/config';
   import publicStyle from '../../../components/publicStyle/publicStyle.scss';
-  import { loginList } from '../../../components/indexedDB/select';
+  import { getLoginList } from '../../../components/indexedDB/select';
   import { getChaohuaList, checkIn } from './request';
   import { sleep } from '../../../utils';
 
@@ -208,7 +206,7 @@
     },
     async mounted(): Promise<void>{
       this.$store.dispatch('checkin/loginList', {
-        data: await loginList()
+        data: await getLoginList()
       });
     }
   };

@@ -1,8 +1,8 @@
 import IndexedDB from 'indexeddb-tools';
 import config from '../config/config';
 
-// 获取登陆
-export function loginList(): Promise{
+// 获取已登陆账号列表
+export function getLoginList(): Promise{
   return new Promise((resolve: Function, reject: Function): void=>{
     IndexedDB(config.indexeddb.name, config.indexeddb.version, {
       success(event: Event): void{

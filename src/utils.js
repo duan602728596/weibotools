@@ -56,9 +56,7 @@ export function getSt(cookie: string): Promise{
       method: 'GET',
       headers: {
         Cookie: cookie,
-        Connection: 'keep-alive',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
-                    + ' Chrome/66.0.3359.181 Safari/537.36'
+        Connection: 'keep-alive'
       }
     }, (err: any, res: Object, data: string): void=>{
       if(err){

@@ -58,7 +58,7 @@
   import moment from 'moment';
   import hint from 'hint';
   import config from '../../../components/config/config';
-  import { loginList } from '../../../components/indexedDB/select';
+  import { getLoginList } from '../../../components/indexedDB/select';
   import publicStyle from '../../../components/publicStyle/publicStyle.scss';
   import { prelogin, pattern, verify, login } from './request';
 
@@ -211,7 +211,7 @@
     },
     async mounted(): Promise<void>{
       this.$store.dispatch('login/loginList', {
-        data: await loginList()
+        data: await getLoginList()
       });
     }
   };
