@@ -47,7 +47,7 @@
 <script type="text/javascript">
   const process: Object = global.require('process');
 
-  let isGuanggao: boolean = do{
+  const isGuanggao: boolean = do{
     if(process.env.NODE_ENV === 'development'){
       false;
     }else{
