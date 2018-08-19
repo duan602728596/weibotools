@@ -44,10 +44,9 @@
 <script type="text/javascript">
   import IndexedDB from 'indexeddb-tools';
   import moment from 'moment';
-  import Base64 from 'Base64';
   import hint from 'hint';
   import config from '../../../components/config/config';
-  import { yanzheng, getCaptcha, yanzhengCaptcha, loginWeibo } from './loginWeibo';
+  import { prelogin, pattern, verify, login } from './request';
 
   export default {
     data(): Object{
@@ -89,7 +88,7 @@
         const step4: {
           data: Object,
           cookie: string
-        } = await loginWeibo(this.weiboLogin.username, this.weiboLogin.password, id);
+        } = await login(this.weiboLogin.username, this.weiboLogin.password, id);
         // 添加数据
         IndexedDB(config.indexeddb.name, config.indexeddb.version, {
           success(event: Event): void{
@@ -125,40 +124,42 @@
           }
         });
       },
+      // 验证码回调函数
+      async verifyCallback(step2: Object, event: Event): Promise<void>{
+        try{
+          // 判断验证码是否正确
+          const data: Object = event.data;
+          const step3: Object = await verify(
+            encodeURIComponent(step2.id),
+            encodeURIComponent(this.weiboLogin.username),
+            encodeURIComponent(data.path_enc),
+            encodeURIComponent(data.data_enc)
+          );
+          if(step3.code === '100000'){
+            this.loginWeibo(step2.id);
+          }else{
+            this.$message.error(`（${ step3.code }）${ step3.msg }`);
+          }
+        }catch(err){
+          console.error(err);
+          this.$message.error('验证失败！');
+        }
+        document.removeEventListener('weibo-pattlock', this._verifyCallback);
+        this._verifyCallback = null;
+      },
       // 验证是否需要验证码
       handleLogin(): void{
         this.$refs['weiboLogin'].validate(async(valid: boolean): Promise<void>=>{
           if(!valid) return void 0;
           try{
             // 判断是否需要验证码
-            const step1: Object = await yanzheng(Base64.encode(this.weiboLogin.username));
+            const step1: Object = await prelogin(btoa(this.weiboLogin.username));
             if(('showpin' in step1 && step1.showpin === 1) || ('smsurl' in step1) || this.weiboLogin.vcode === true){
               // 获取验证码
-              const step2: Object = await getCaptcha(this.weiboLogin.username);
+              const step2: Object = await pattern(this.weiboLogin.username);
               hint(step2.path_enc, step2.id);
-              // 监听验证是否完成
-              const cb: Function = async(event: Event): Promise<void>=>{
-                try{
-                  // 判断验证码是否正确
-                  const data: Object = event.data;
-                  const step3: Object = await yanzhengCaptcha(
-                    encodeURIComponent(step2.id),
-                    encodeURIComponent(this.weiboLogin.username),
-                    encodeURIComponent(data.path_enc),
-                    encodeURIComponent(data.data_enc)
-                  );
-                  if(step3.code === '100000'){
-                    this.loginWeibo(step2.id);
-                  }else{
-                    this.$message.error(`（${ step3.code }）${ step3.msg }`);
-                  }
-                  document.removeEventListener('weibo-pattlock', cb);
-                }catch(err){
-                  console.error(err);
-                  this.$message.error('验证失败！');
-                }
-              };
-              document.addEventListener('weibo-pattlock', cb, false);
+              this._verifyCallback = this.verifyCallback.bind(this, step2);
+              document.addEventListener('weibo-pattlock', this._verifyCallback, false);
             }else{
               this.loginWeibo();
             }
