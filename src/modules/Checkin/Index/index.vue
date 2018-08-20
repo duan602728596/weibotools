@@ -30,8 +30,19 @@
         <el-collapse-item v-for="item in $store.getters['checkin/getLoginList']()"
           :key="item.username"
           :name="item.username"
-          :title="title(item.username, item.status)"
         >
+          <template slot="title">
+            <span :class="publicStyle.mr10">
+              <b>{{ item.username }}</b>
+              <span v-if="item.status === 1">【已签到】</span>
+            </span>
+            <el-button size="mini"
+              :loading="btnLoading"
+              @click="handleCheckinOneClick($event, item, $store.getters['checkin/getLoginList']())"
+            >
+              签到
+            </el-button>
+          </template>
           <ul class="list clearfix" v-if="item.children && item.children.length > 0">
             <li class="list-item clearfix" v-for="item2 in item.children">
               <img class="list-item-image" :src="item2.pic">
@@ -73,10 +84,6 @@
       };
     },
     methods: {
-      // title
-      title(username: string, status: ?number): string{
-        return `${ username } ${ status === 1 ? '【已签到】' : '' }`;
-      },
       // 签到
       async checkIn(item: Object, list: Array): Promise<void>{
         // 循环签到超话
@@ -157,20 +164,33 @@
           const list: [] = this.$store.getters['checkin/getLoginList']();
           for(let i: number = 0, j: number = list.length; i < j; i++){
             const item: Object = list[i];
-            // 获取超级话题列表
-            if(!('children' in item)) await this.getChaohuaList(item);
-            // 修改ui
-            this.$store.dispatch('checkin/loginList', {
-              data: list
-            });
-            // 签到
-            await this.checkIn(item, list);
-            item.status = 1;
-            // 修改ui
-            this.$store.dispatch('checkin/loginList', {
-              data: list
-            });
+            await this.handleCheckinOneClick(null, item, list);
           }
+          this.btnLoading = false;
+        }catch(err){
+          console.error(err);
+          this.btnLoading = false;
+          this.$message.error('签到失败！');
+        }
+      },
+      // 单个签到
+      async handleCheckinOneClick(event: ?Event, item: Object, list: Array): Promise<void>{
+        if(event) event.stopPropagation();
+        try{
+          this.btnLoading = true;
+          // 获取超级话题列表
+          if(!('children' in item)) await this.getChaohuaList(item);
+          // 修改ui
+          this.$store.dispatch('checkin/loginList', {
+            data: list
+          });
+          // 签到
+          await this.checkIn(item, list);
+          item.status = 1;
+          // 修改ui
+          this.$store.dispatch('checkin/loginList', {
+            data: list
+          });
           this.btnLoading = false;
         }catch(err){
           console.error(err);
