@@ -46,7 +46,7 @@
           <el-checkbox v-model="weiboLogin.vcode"></el-checkbox>
         </el-form-item>
         <div class="btn-box">
-          <el-button class="mr10" type="primary" size="mini" @click="handleLoginClick()">登录</el-button>
+          <el-button class="mr10" type="primary" size="mini" @click="handleLoginClick">登录</el-button>
           <el-button type="danger" size="mini" @click="handleDialogDisplayClick(false)">取消</el-button>
         </div>
       </el-form>

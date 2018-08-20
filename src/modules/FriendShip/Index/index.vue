@@ -19,12 +19,14 @@
       </router-link>
     </el-header>
     <el-main :class="publicStyle.main">
-      <el-table size="mini" :data="$store.getters['friendship/getFrindShipList']()" v-loading="loading">
-        <el-table-column width="30">
-          <template slot-scope="scope">
-            <el-checkbox></el-checkbox>
-          </template>
-        </el-table-column>
+      <el-table ref="friendship"
+        size="mini"
+        row-key="user.id"
+        :data="$store.getters['friendship/getFrindShipList']()"
+        v-loading="loading"
+        @selection-change="handleCheckboxChange"
+      >
+        <el-table-column type="selection" width="30"></el-table-column>
         <el-table-column width="50">
           <template slot-scope="scope">
             <img class="avatar" :src="scope.row.user.profile_image_url">
@@ -45,20 +47,23 @@
 <script type="text/javascript">
   import { getLoginList } from '../../../components/indexedDB/select';
   import publicStyle from '../../../components/publicStyle/publicStyle.scss';
+  import { getSt } from '../../../utils';
   import { getFriendShipList } from './request';
 
   export default {
     data(): Object{
       return {
-        loading: false, // 加载中
+        loading: false,   // 加载中
         publicStyle,
-        selectLogin: ''
+        selectLogin: '',
+        checkboxValue: [] // 准备取关的id数组
       };
     },
     methods: {
       // 选中一个账号
       async handleLoginChange(value: string): Promise<void>{
         this.loading = true;
+        this.checkboxValue = [];
         try{
           let page: number = 1;
           let list: [] = [];
@@ -79,6 +84,10 @@
           console.error(err);
         }
         this.loading = false;
+      },
+      // 表格内checkbox事件
+      handleCheckboxChange(value: boolean, scope: Object): void{
+        this.checkboxValue = value;
       }
     },
     async mounted(): Promise<void>{

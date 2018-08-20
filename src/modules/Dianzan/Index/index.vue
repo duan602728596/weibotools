@@ -17,7 +17,7 @@
         size="mini"
         icon="el-icon-star-on"
         :loading="btnLoading"
-        @click="handleDianzanClick()"
+        @click="handleDianzanClick"
       >
         一键点赞
       </el-button>
@@ -56,7 +56,7 @@
         <el-form-item label="点赞最大页数：" prop="page">
           <el-input v-model="addLfid.page"></el-input>
         </el-form-item>
-        <el-button :class="publicStyle.mr10" type="primary" size="mini" @click="handleChangeLfidClick()">
+        <el-button :class="publicStyle.mr10" type="primary" size="mini" @click="handleChangeLfidClick">
           {{ this.isEdit ? '修改' : '添加' }}
         </el-button>
         <el-button type="danger" size="mini" @click="handleDialogDisplayClick(false)">取消</el-button>

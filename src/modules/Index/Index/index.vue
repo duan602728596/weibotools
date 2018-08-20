@@ -39,7 +39,7 @@
           </el-col>
         </el-row>
       </div>
-      <el-button class="close" type="danger" icon="el-icon-circle-close" @click="handleCloseGuanggaoClick()">关闭</el-button>
+      <el-button class="close" type="danger" icon="el-icon-circle-close" @click="handleCloseGuanggaoClick">关闭</el-button>
     </div>
   </div>
 </template>

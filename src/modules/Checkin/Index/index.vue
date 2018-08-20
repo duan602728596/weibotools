@@ -11,7 +11,7 @@
         type="primary"
         size="mini"
         icon="el-icon-edit"
-        @click="handleAutoCheckinClick()"
+        @click="handleAutoCheckinClick"
       >
         一键签到
       </el-button>
