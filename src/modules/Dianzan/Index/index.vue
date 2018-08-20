@@ -32,6 +32,7 @@
         <el-table-column label="操作" prop="handle">
           <template slot-scope="scope">
             <el-button-group>
+              <!-- TODO: 单个人的点赞 -->
               <el-button size="mini" @click="handleEditLfidClick(scope)">修改</el-button>
               <el-button type="danger" size="mini" icon="el-icon-delete" @click="handleDeleteLfidClick(scope)">删除</el-button>
             </el-button-group>
@@ -113,7 +114,7 @@
             lfid: '',
             page: '1'
           };
-          this.$refs['addLfid'].resetFields();
+          if(this.$refs['addLfid']) this.$refs['addLfid'].resetFields();
         }
       },
       // 修改lfid

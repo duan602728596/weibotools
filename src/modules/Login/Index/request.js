@@ -29,7 +29,7 @@ export function login(username: string, password: string, id: ?string): Promise{
   };
   if(id) query.vid = id;
 
-  const data: Object = queryString.stringify(query);
+  const data: string = queryString.stringify(query);
   return new Promise((resolve: Function, reject: Function): void=>{
     request({
       uri: 'https://passport.weibo.cn/sso/login',

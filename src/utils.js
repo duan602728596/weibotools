@@ -55,8 +55,7 @@ export function getSt(cookie: string): Promise{
       uri: 'https://m.weibo.cn/api/config',
       method: 'GET',
       headers: {
-        Cookie: cookie,
-        Connection: 'keep-alive'
+        Cookie: cookie
       }
     }, (err: any, res: Object, data: string): void=>{
       if(err){
