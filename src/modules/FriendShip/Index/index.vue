@@ -56,15 +56,16 @@
   import { getLoginList } from '../../../components/indexedDB/select';
   import publicStyle from '../../../components/publicStyle/publicStyle.scss';
   import { getSt } from '../../../utils';
-  import { getFriendShipList, friendshipsApi } from './request';
+  import { getFriendShipList, listApi, friendshipsApi } from './request';
 
   export default {
     data(): Object{
       return {
-        loading: false,        // 加载中
+        loading: false,           // 加载中
         publicStyle,
-        selectLoginCookie: '', // 选中账号的cookie
-        checkboxValue: []      // 准备取关的id数组
+        selectLoginCookie: '',    // 选中账号的cookie
+        friendShipListCookie: '', // 请求关注列表时获取的cookie，关注或取消关注都会用到
+        checkboxValue: []         // 准备取关的id数组
       };
     },
     methods: {
@@ -75,8 +76,11 @@
         try{
           let page: number = 1;
           let list: [] = [];
+          let cookie: ?string = null;
           while(page){
-            const { data }: { data: Object } = await getFriendShipList(value, page);
+            const res: Object = await getFriendShipList(value, page);
+            const { data }: { data: Object } = res.data;
+            if(!cookie) cookie = res.cookie; // cookie，后面关注和取关会用到
             if(data.cards.length === 0){
               break;
             }else{
@@ -85,6 +89,7 @@
               page += 1;
             }
           }
+          this.friendShipListCookie = cookie;
           this.$store.dispatch('friendship/frindShipList', {
             data: list
           });
@@ -116,14 +121,17 @@
             cookie: string
           } = await getSt(this.selectLoginCookie);
           const { st }: { st: string } = step.data.data;
-          const cookie: string = `${ this.selectLoginCookie }; ${ step.cookie }`;
+          const cookie: string = `${ this.selectLoginCookie }; ${ step.cookie }; ${ this.friendShipListCookie }`;
           for(const item: Object of itemList){
-            const result: Object = await friendshipsApi(cookie, item.user.id, st, action);
-            console.log(result);
-            if(action === false){
-              item.isQuguan = true;
+            const res: Object = await friendshipsApi(cookie, item.user.id, st, action);
+            if(res.ok === 1){
+              if(action === false){
+                item.isQuguan = true;
+              }else{
+                delete item.isQuguan;
+              }
             }else{
-              delete item.isQuguan;
+              this.$message.error(`${ item.user.screen_name }：${ res.msg }`);
             }
           }
           if(action === false){

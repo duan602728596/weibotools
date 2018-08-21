@@ -15,15 +15,16 @@ export function getFriendShipList(cookie: string, page: ?number): Promise{
       if(err){
         reject(err);
       }else{
-        resolve(JSON.parse(data));
+        resolve({
+          data: JSON.parse(data),
+          cookie: res.headers['set-cookie'].join('; ')
+        });
       }
     });
   }).catch((err: any): void=>{
     console.error(err);
   });
 }
-
-// TODO: 【GET】https://m.weibo.cn/api/config/list 获取cookie
 
 /**
  * 关注
@@ -34,9 +35,6 @@ export function getFriendShipList(cookie: string, page: ?number): Promise{
  */
 export function friendshipsApi(cookie: string, uid: number, st: string, action: boolean = false): Promise{
   const data: string = queryString.stringify({ uid, st });
-
-  console.log(cookie, st);
-
   return new Promise((resolve: Function, reject: Function): void=>{
     request({
       uri: `https://m.weibo.cn/api/friendships/${ action === true ? 'create' : 'destory' }`,
@@ -44,7 +42,8 @@ export function friendshipsApi(cookie: string, uid: number, st: string, action: 
       headers: {
         Cookie: cookie,
         Referer: 'https://m.weibo.cn/p/index?containerid=231093_-_selffollowed',
-        'X-Requested-With': 'XMLHttpRequest'
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: data
     }, (err: any, res: Object, data: string): void=>{
