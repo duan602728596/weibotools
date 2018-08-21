@@ -34,7 +34,7 @@
           <template slot="title">
             <span :class="publicStyle.mr10">
               <b>{{ item.username }}</b>
-              <span v-if="item.status === 1">【已签到】</span>
+              <el-tag type="success" size="mini" v-if="item.status === 1">已签到</el-tag>
             </span>
             <el-button size="mini"
               :loading="btnLoading"
@@ -61,6 +61,7 @@
                 @click="handleManualCheckinClick(item, item2)"
               />
             </li>
+            <li class="list-item list-item-space" v-if="item.children.length % 2 !== 0"></li>
           </ul>
           <div class="no-data" v-else>暂无数据</div>
         </el-collapse-item>
@@ -248,6 +249,7 @@
   }
 
   $border: 1px solid #ebeef5;
+  $height: 40px;
   .list {
     border-top: $border;
     border-left: $border;
@@ -285,6 +287,9 @@
       &-success {
         color: #52d938;
       }
+    }
+    &-space {
+      height: 51px;
     }
   }
 </style>

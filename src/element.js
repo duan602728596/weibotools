@@ -2,7 +2,7 @@
 import Vue from 'vue/dist/vue';
 import {
   Row, Col, Container, Header, Main, Button, ButtonGroup, Table, TableColumn, Dialog, Form, FormItem, Input, Message,
-  Collapse, CollapseItem, Checkbox, Select, Option, Loading
+  Collapse, CollapseItem, Checkbox, Select, Option, Loading, Tag
 } from 'element-ui';
 
 Vue.use(Row);
@@ -24,5 +24,6 @@ Vue.use(Checkbox);
 Vue.use(Select);
 Vue.use(Option);
 Vue.use(Loading);
+Vue.use(Tag);
 
 Vue.prototype.$message = Message;
