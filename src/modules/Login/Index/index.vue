@@ -92,51 +92,60 @@
       handleDialogDisplayClick(display: boolean): void{
         this.visible = display;
         if(display){
-          setTimeout((): void=>{
-            this.$refs['weiboLogin'].resetFields();
-          }, 100);
+          this.weiboLogin = {
+            username: '',
+            password: '',
+            vcode: false
+          };
+          if(this.$refs['weiboLogin']) this.$refs['weiboLogin'].resetFields();
         }
       },
       // 登录微博
       async loginWeibo(id: ?string): Promise<void>{
-        const _this: this = this;
-        // 登录
-        const step4: {
-          data: Object,
-          cookie: string
-        } = await login(this.weiboLogin.username, this.weiboLogin.password, id);
-        // 添加数据
-        IndexedDB(config.indexeddb.name, config.indexeddb.version, {
-          success(event: Event): void{
-            const store: Object = this.getObjectStore(config.indexeddb.objectStore[0].name, true);
-            const data: Object = {
-              username: _this.weiboLogin.username,
-              password: _this.weiboLogin.password,
-              loginTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-              cookie: step4.cookie
-            };
-            store.put(data);
-            // 修改ui
-            const list: [] = _this.$store.getters['login/getLoginList']();
-            let index: number = -1;
-            for(let i: number = 0, j: number = list.length; i < j; i++){
-              if(_this.weiboLogin.username === list[i].username){
-                index = i;
-                break;
+        try{
+          const _this: this = this;
+          // 登录
+          const step4: {
+            data: Object,
+            cookie: string
+          } = await login(this.weiboLogin.username, this.weiboLogin.password, id);
+          // 添加数据
+          IndexedDB(config.indexeddb.name, config.indexeddb.version, {
+            success(event: Event): void{
+              const store: Object = this.getObjectStore(config.indexeddb.objectStore[0].name, true);
+              const data: Object = {
+                username: _this.weiboLogin.username,
+                password: _this.weiboLogin.password,
+                loginTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+                cookie: step4.cookie
+              };
+              store.put(data);
+              // 修改ui
+              const list: [] = _this.$store.getters['login/getLoginList']();
+              let index: number = -1;
+              for(let i: number = 0, j: number = list.length; i < j; i++){
+                if(_this.weiboLogin.username === list[i].username){
+                  index = i;
+                  break;
+                }
               }
+              if(index === -1){
+                list.push(data);
+              }else{
+                list[index] = data;
+              }
+              _this.$store.dispatch('login/loginList', {
+                data: list
+              });
+              _this.$message.success('登陆成功！');
+              _this.visible = false;
+              this.close();
             }
-            if(index === -1){
-              list.push(data);
-            }else{
-              list[index] = data;
-            }
-            _this.$store.dispatch('login/loginList', {
-              data: list
-            });
-            _this.visible = false;
-            this.close();
-          }
-        });
+          });
+        }catch(err){
+          console.error(err);
+          this.$message.error('登陆失败！');
+        }
       },
       // 验证码回调函数
       async verifyCallback(step2: Object, event: Event): Promise<void>{
