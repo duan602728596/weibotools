@@ -2,7 +2,7 @@
   <el-container>
     <!-- 顶部菜单 -->
     <el-header :class="classNames(publicStyle.header, 'clearfix')">
-      <h4 :class="publicStyle.fl">一键签到</h4>
+      <h4 :class="publicStyle.fl">超级话题一键签到</h4>
       <router-link :class="publicStyle.fr" to="/">
         <el-button type="danger" size="mini" icon="el-icon-circle-close">返回</el-button>
       </router-link>
