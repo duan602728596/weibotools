@@ -17,7 +17,7 @@
         size="mini"
         icon="el-icon-star-on"
         :loading="btnLoading"
-        @click="handleDianzanClick"
+        @click="handleDianzanAllClick"
       >
         一键点赞
       </el-button>
@@ -29,10 +29,10 @@
         <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="lfid" prop="lfid"></el-table-column>
         <el-table-column label="点赞最大页数" prop="page"></el-table-column>
-        <el-table-column label="操作" prop="handle">
+        <el-table-column label="操作" width="220" prop="handle">
           <template slot-scope="scope">
             <el-button-group>
-              <!-- TODO: 单个人的点赞 -->
+              <el-button size="mini" :loading="btnLoading" @click="handleDianzanClick(scope)">点赞</el-button>
               <el-button size="mini" @click="handleEditLfidClick(scope)">修改</el-button>
               <el-button type="danger" size="mini" icon="el-icon-delete" @click="handleDeleteLfidClick(scope)">删除</el-button>
             </el-button-group>
@@ -203,7 +203,7 @@
         }
       },
       // 一键点赞
-      async handleDianzanClick(): Promise<void>{
+      async handleDianzanAllClick(): Promise<void>{
         this.btnLoading = true;
         try{
           const loginList: Object[] = await getLoginList();
@@ -223,6 +223,28 @@
             await this.dianzanLfid(item, loginList);
             await sleep(3000);
           }
+          this.btnLoading = false;
+        }catch(err){
+          this.btnLoading = false;
+          this.$message.error('点赞失败！');
+          console.error(err);
+        }
+      },
+      // 单个lfid的点赞
+      async handleDianzanClick(scope: Object): Promise<void>{
+        this.btnLoading = true;
+        try{
+          const loginList: Object[] = await getLoginList();
+          // 获取st
+          for(let i: number = 0, j: number = loginList.length; i < j; i++){
+            const step: {
+              data: Object,
+              cookie: string
+            } = await getSt(loginList[i].cookie);
+            loginList[i].st = step.data.data.st;
+            loginList[i].cookie += `; ${ step.cookie }`;
+          }
+          await this.dianzanLfid(scope.row, loginList);
           this.btnLoading = false;
         }catch(err){
           this.btnLoading = false;
