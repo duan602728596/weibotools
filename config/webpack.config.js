@@ -66,7 +66,7 @@ function config(options){
               loader: 'file-loader',
               options: {
                 name: fileName,
-                outputPath: isDevelopment ? 'file/' : '../file/'
+                outputPath: 'file/'
               }
             }
           ]

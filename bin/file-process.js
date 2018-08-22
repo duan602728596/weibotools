@@ -78,23 +78,3 @@ function mkdir(filePath){
     console.error(err);
   });
 }
-
-(async function(){
-  try{
-    // 移动file文件
-    const build = path.resolve(__dirname, '../build');
-    const filePath = path.resolve(__dirname, '../file');
-    const files = await readdir(filePath);
-    const buildFile = path.resolve(build, 'file');
-    await mkdir(buildFile);
-    for(let i = 0, j = files.length; i < j; i++){
-      const item = files[i];
-      const old = path.resolve(filePath, item);
-      const new1 = path.resolve(buildFile, item);
-      await rename(old, new1);
-    }
-    await rmdir(filePath);
-  }catch(err){
-    console.error(err);
-  }
-})();
