@@ -1,4 +1,4 @@
-/* MiniCssExtractPlugin.loader配置 */
+/* MiniCssExtractPlugin.loader 配置 */
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
