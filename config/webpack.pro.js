@@ -2,6 +2,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssets = require('optimize-css-assets-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const config = require('./webpack.config');
 const cssConfig = require('./css.config');
 const sassConfig = require('./sass.config');
@@ -45,6 +46,7 @@ module.exports = config({
     splitChunks: {
       chunks: 'all',
       automaticNameDelimiter: '.'
-    }
+    },
+    minimizer: [new TerserPlugin()]
   }
 });
