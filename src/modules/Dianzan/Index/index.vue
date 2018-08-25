@@ -29,12 +29,19 @@
         <el-table-column label="名称" prop="name"></el-table-column>
         <el-table-column label="lfid" prop="lfid"></el-table-column>
         <el-table-column label="点赞最大页数" prop="page"></el-table-column>
-        <el-table-column label="操作" width="220" prop="handle">
+        <el-table-column label="操作" width="300" prop="handle">
           <template slot-scope="scope">
             <el-button-group>
               <el-button size="mini" :loading="btnLoading" @click="handleDianzanClick(scope)">点赞</el-button>
-              <el-button size="mini" @click="handleEditLfidClick(scope)">修改</el-button>
-              <el-button type="danger" size="mini" icon="el-icon-delete" @click="handleDeleteLfidClick(scope)">删除</el-button>
+              <el-button size="mini" :loading="btnLoading" @click="handleEditLfidClick(scope)">修改</el-button>
+              <el-button type="danger"
+                size="mini"
+                icon="el-icon-delete"
+                :loading="btnLoading"
+                @click="handleDeleteLfidClick(scope)"
+              >
+                删除
+              </el-button>
             </el-button-group>
           </template>
         </el-table-column>
@@ -183,7 +190,7 @@
         // 获取信息
         for(let p: number = 1, q: number = Number(item.page); p <= q; p++){
           const step1: Object = await getIndex(item.lfid, p);
-          const cds: Object[] = step1.data?.data?.cards || [];
+          const cds: Object[] = step1.data?.cards || [];
           if(cds.length === 0){
             break;
           }else{

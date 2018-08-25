@@ -1,4 +1,3 @@
-const axios: Object = global.require('axios');
 const request: Function = global.require('request');
 
 /**
@@ -7,7 +6,18 @@ const request: Function = global.require('request');
  * @param { number } page
  */
 export function getIndex(lfid: string, page: number = 1): Promise{
-  return axios.get(`https://m.weibo.cn/api/container/getIndex?containerid=${ lfid }&page=${ page }`);
+  return new Promise((resolve: Function, reject: Function): void=>{
+    request({
+      uri: `https://m.weibo.cn/api/container/getIndex?containerid=${ lfid }&page=${ page }`,
+      method: 'GET'
+    }, (err: any, res: Object, data: string): void=>{
+      if(err){
+        reject(err);
+      }else{
+        resolve(JSON.parse(data));
+      }
+    });
+  });
 }
 
 /**
