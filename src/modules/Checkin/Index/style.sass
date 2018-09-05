@@ -1,0 +1,41 @@
+.no-data
+  text-align: center
+  font-size: 12px
+  color: #9b9b9b
+.manual-checkin-btn
+  margin-top: 6px
+
+$border: 1px solid #ebeef5
+$height: 40px
+.list
+  border-top: $border
+  border-left: $border
+  border-right: $border
+.list-item
+  box-sizing: border-box
+  float: left
+  padding: 5px
+  width: 50%
+  line-height: 0
+  border-bottom: $border
+  &:nth-of-type(odd)
+    border-right: $border
+  &-image
+    width: 40px
+    height: 40px
+    margin-right: 10px
+  &-title
+    vertical-align: 15px
+    font-size: 16px
+    margin-right: 5px
+  &-status
+    vertical-align: 16px
+    font-size: 14px
+    &-fail, &-success
+      vertical-align: 16px
+    &-fail
+      color: #f00
+    &-success
+      color: #52d938
+  &-space
+    height: 51px

@@ -22,7 +22,7 @@ function config(options){
       rules: [
         { // js
           test: /^.*\.js$/,
-          use: [babelConfig, 'eslint-loader'],
+          use: [babelConfig],
           exclude: /(dll\.js|node_modules|js-base64|weibo-pattlock)/
         },
         { // vue
