@@ -11,6 +11,60 @@ export default {
     return {
       publicStyle,
       visible: false, // 弹出层
+      // 表格配置
+      columns: [
+        {
+          title: '账号',
+          key: 'username'
+        },
+        {
+          title: '密码',
+          key: 'password'
+        },
+        {
+          title: '登录日期',
+          key: 'loginTime',
+          width: 180
+        },
+        {
+          title: '操作',
+          key: 'handle',
+          width: 320,
+          render: (h: Function, item: Object): Object=>{
+            return h('i-button-group', [
+              h('i-button', {
+                props: {
+                  size: 'small',
+                  loading: this.btnLoading
+                },
+                on: {
+                  click: this.handleLoginAgainClick.bind(this, item, false)
+                }
+              }, ['重新登录']),
+              h('i-button', {
+                props: {
+                  size: 'small',
+                  loading: this.btnLoading
+                },
+                on: {
+                  click: this.handleLoginAgainClick.bind(this, item, true)
+                }
+              }, ['使用验证码重新登陆']),
+              h('i-button', {
+                props: {
+                  type: 'error',
+                  size: 'small',
+                  icon: 'ios-beaker',
+                  loading: this.btnLoading
+                },
+                on: {
+                  click: this.handleDeleteLoginClick.bind(this, item)
+                }
+              }, ['删除'])
+            ]);
+          }
+        }
+      ],
       // 校验规则
       rules: {
         username: {
@@ -140,22 +194,22 @@ export default {
       });
     },
     // 重新登陆
-    handleLoginAgainClick(scope: Object, useVcode: boolean = false): void{
-      const { row }: { row: Object } = scope;
+    handleLoginAgainClick(item: Object, useVcode: boolean = false): void{
+      const { row }: { row: Object } = item;
       this.weiboLogin.username = row.username;
       this.weiboLogin.password = row.password;
       this.weiboLogin.vcode = useVcode;
       this.prelogin();
     },
     // 删除
-    handleDeleteLoginClick(scope: Object): void{
+    handleDeleteLoginClick(item: Object): void{
       const _this: this = this;
       IndexedDB(config.indexeddb.name, config.indexeddb.version, {
         success(event: Event): void{
           const store: Object = this.getObjectStore(config.indexeddb.objectStore[0].name, true);
-          store.delete(scope.row.username);
+          store.delete(item.row.username);
           _this.$store.dispatch('login/deleteLoginInformation', {
-            index: scope.$index
+            index: item.$index
           });
           this.close();
         }

@@ -6,14 +6,14 @@
       <router-link :class="publicStyle.fr" to="/">
         <i-button type="error" icon="md-power">返回</i-button>
       </router-link>
-      <i-button :class="classNames(publicStyle.fr, publicStyle.mr10, publicStyle.mt16)"
+      <i-button :class="classNames(publicStyle.fr, publicStyle.mr10, publicStyle.mt17)"
         type="info"
         icon="ios-add-circle-outline"
         @click="handleDialogDisplayClick(true)"
       >
         添加lfid
       </i-button>
-      <i-button :class="classNames(publicStyle.fr, publicStyle.mr10, publicStyle.mt16)"
+      <i-button :class="classNames(publicStyle.fr, publicStyle.mr10, publicStyle.mt17)"
         type="warning"
         icon="md-heart"
         :loading="btnLoading"

@@ -102,8 +102,8 @@ export default {
       }
     },
     // 修改lfid
-    handleEditLfidClick(scope: Object): void{
-      const { row }: { row: Object } = scope;
+    handleEditLfidClick(item: Object): void{
+      const { row }: { row: Object } = item;
       this.addLfid.name = row.name;
       this.addLfid.lfid = row.lfid;
       this.addLfid.page = row.page;
@@ -152,14 +152,14 @@ export default {
       });
     },
     // 删除一个lfid
-    handleDeleteLfidClick(scope: Object): void{
+    handleDeleteLfidClick(item: Object): void{
       const _this: this = this;
       IndexedDB(config.indexeddb.name, config.indexeddb.version, {
         success(event: Event): void{
           const store: Object = this.getObjectStore(config.indexeddb.objectStore[1].name, true);
-          store.delete(scope.row.lfid);
+          store.delete(item.row.lfid);
           _this.$store.dispatch('dianzan/deleteLfid', {
-            index: scope.$index
+            index: item.$index
           });
           this.close();
         }
@@ -219,7 +219,7 @@ export default {
       }
     },
     // 单个lfid的点赞
-    async handleDianzanClick(scope: Object): Promise<void>{
+    async handleDianzanClick(item: Object): Promise<void>{
       this.btnLoading = true;
       try{
         const loginList: Object[] = await getLoginList();
@@ -232,7 +232,7 @@ export default {
           loginList[i].st = step.data.data.st;
           loginList[i].cookie += `; ${ step.cookie }`;
         }
-        await this.dianzanLfid(scope.row, loginList);
+        await this.dianzanLfid(item.row, loginList);
         this.btnLoading = false;
       }catch(err){
         this.btnLoading = false;
