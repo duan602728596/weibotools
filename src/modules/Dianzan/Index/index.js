@@ -11,6 +11,59 @@ export default {
       publicStyle,
       visible: false,     // 弹出层
       btnLoading: false,  // 按钮是否加载中
+      // 表格配置
+      columns: [
+        {
+          title: '名称',
+          key: 'name'
+        },
+        {
+          title: 'lfid',
+          key: 'lfid'
+        },
+        {
+          title: '点赞最大页数',
+          key: 'page'
+        },
+        {
+          title: '操作',
+          key: 'handle',
+          width: 250,
+          render: (h: Function, item: Object): Object=>{
+            return h('i-button-group', [
+              h('i-button', {
+                props: {
+                  size: 'small',
+                  loading: this.btnLoading
+                },
+                on: {
+                  click: this.handleDianzanClick.bind(this, item)
+                }
+              }, ['点赞']),
+              h('i-button', {
+                props: {
+                  size: 'small',
+                  loading: this.btnLoading
+                },
+                on: {
+                  click: this.handleEditLfidClick.bind(this, item)
+                }
+              }, ['修改']),
+              h('i-button', {
+                props: {
+                  type: 'error',
+                  size: 'small',
+                  icon: 'ios-beaker',
+                  loading: this.btnLoading
+                },
+                on: {
+                  click: this.handleDeleteLfidClick.bind(this, item)
+                }
+              }, ['删除'])
+            ]);
+          }
+        }
+      ],
       // 校验规则
       rules: {
         name: {
@@ -88,7 +141,11 @@ export default {
             _this.$store.dispatch('dianzan/lfidList', {
               data: list
             });
-            if(!_this.isEdit) _this.$refs['addLfid'].resetFields(); // 如果是编辑模式，不重置表单
+            if(!_this.isEdit){
+              _this.$refs['addLfid'].resetFields(); // 如果是编辑模式，不重置表单
+            }else{
+              _this.visible = false;
+            }
             this.close();
           }
         });

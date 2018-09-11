@@ -4,7 +4,7 @@ import store from './store/store';
 import classNames from 'classnames';
 import routers from './router/routers';
 import './common.scss';
-import './element';
+import './iview';
 import './components/indexedDB/indexeddb-init';
 
 /* app */

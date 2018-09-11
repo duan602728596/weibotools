@@ -7,6 +7,7 @@ const config = require('./webpack.config');
 const cssConfig = require('./css.config');
 const sassConfig = require('./sass.config');
 const miniCssExtractPluginConfig = require('./miniCssExtractPlugin.config');
+const lessConfig = require('./less.config');
 
 /* 合并配置 */
 module.exports = config({
@@ -29,9 +30,9 @@ module.exports = config({
           }
         ]
       },
-      { // css
-        test: /^.*\.css$/,
-        use: [miniCssExtractPluginConfig, 'css-loader'],
+      { // less, css
+        test: /^.*\.(le|c)ss$/,
+        use: [miniCssExtractPluginConfig, 'css-loader', lessConfig],
       }
     ]
   },

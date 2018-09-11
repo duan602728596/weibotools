@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const config = require('./webpack.config');
 const cssConfig = require('./css.config');
 const sassConfig = require('./sass.config');
+const lessConfig = require('./less.config');
 const manifestJson = require('../.dll/manifest.json');
 
 /* 合并配置 */
@@ -27,9 +28,9 @@ module.exports = config({
           }
         ]
       },
-      { // css
-        test: /^.*\.css$/,
-        use: ['vue-style-loader', 'css-loader']
+      { // less, css
+        test: /^.*\.(le|c)ss$/,
+        use: ['vue-style-loader', 'css-loader', lessConfig]
       }
     ]
   },

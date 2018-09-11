@@ -1,76 +1,52 @@
 <template>
-  <el-container>
+  <i-layout :class="publicStyle.layout">
     <!-- 顶部菜单 -->
-    <el-header :class="classNames(publicStyle.header, 'clearfix')">
-      <h4 :class="publicStyle.fl">一键点赞</h4>
+    <i-header :class="classNames(publicStyle.header, 'clearfix')">
+      <h4 :class="classNames(publicStyle.fl, publicStyle.title)">一键点赞</h4>
       <router-link :class="publicStyle.fr" to="/">
-        <el-button type="danger" size="mini" icon="el-icon-circle-close-outline">返回</el-button>
+        <i-button type="error" icon="md-power">返回</i-button>
       </router-link>
-      <el-button :class="classNames(publicStyle.fr, publicStyle.mr10)"
-        size="mini" icon="el-icon-circle-plus"
+      <i-button :class="classNames(publicStyle.fr, publicStyle.mr10, publicStyle.mt16)"
+        type="info"
+        icon="ios-add-circle-outline"
         @click="handleDialogDisplayClick(true)"
       >
         添加lfid
-      </el-button>
-      <el-button :class="classNames(publicStyle.fr, publicStyle.mr10)"
-        type="primary"
-        size="mini"
-        icon="el-icon-star-on"
+      </i-button>
+      <i-button :class="classNames(publicStyle.fr, publicStyle.mr10, publicStyle.mt16)"
+        type="warning"
+        icon="md-heart"
         :loading="btnLoading"
         @click="handleDianzanAllClick"
       >
         一键点赞
-      </el-button>
-    </el-header>
+      </i-button>
+    </i-header>
     <!-- 表格 -->
-    <el-main :class="publicStyle.main">
-      <p>为了避免被微博判断为操作次数频繁，每次点赞间隔3秒。</p>
-      <el-table :data="$store.getters['dianzan/getLfidList']()" size="mini">
-        <el-table-column label="名称" prop="name"></el-table-column>
-        <el-table-column label="lfid" prop="lfid"></el-table-column>
-        <el-table-column label="点赞最大页数" prop="page"></el-table-column>
-        <el-table-column label="操作" width="300" prop="handle">
-          <template slot-scope="scope">
-            <el-button-group>
-              <el-button size="mini" :loading="btnLoading" @click="handleDianzanClick(scope)">点赞</el-button>
-              <el-button size="mini" :loading="btnLoading" @click="handleEditLfidClick(scope)">修改</el-button>
-              <el-button type="danger"
-                size="mini"
-                icon="el-icon-delete"
-                :loading="btnLoading"
-                @click="handleDeleteLfidClick(scope)"
-              >
-                删除
-              </el-button>
-            </el-button-group>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-main>
+    <i-content :class="publicStyle.main">
+      <p class="shuoming">为了避免被微博判断为操作次数频繁，每次点赞间隔3秒。</p>
+      <i-table :columns="columns" :data="$store.getters['dianzan/getLfidList']()"></i-table>
+    </i-content>
     <!-- 弹出层 -->
-    <el-dialog :visible="visible"
-      :title="(this.isEdit ? '修改' : '添加') + 'lfid'"
-      :fullscreen="true"
-      :append-to-body="true"
-      :show-close="false"
-    >
-      <el-form ref="addLfid" :rules="rules" :model="addLfid">
-        <el-form-item label="名称：" prop="name">
-          <el-input v-model="addLfid.name"></el-input>
-        </el-form-item>
-        <el-form-item label="lfid：" prop="lfid">
-          <el-input v-model="addLfid.lfid"></el-input>
-        </el-form-item>
-        <el-form-item label="点赞最大页数：" prop="page">
-          <el-input v-model="addLfid.page"></el-input>
-        </el-form-item>
-        <el-button :class="publicStyle.mr10" type="primary" size="mini" @click="handleChangeLfidClick">
-          {{ this.isEdit ? '修改' : '添加' }}
-        </el-button>
-        <el-button type="danger" size="mini" @click="handleDialogDisplayClick(false)">取消</el-button>
-      </el-form>
-    </el-dialog>
-  </el-container>
+    <i-modal v-model="visible" :title="(isEdit ? '修改' : '添加') + 'lfid'" :footer-hide="true">
+      <i-form ref="addLfid" :rules="rules" :model="addLfid">
+        <i-form-item label="名称：" prop="name">
+          <i-input v-model="addLfid.name"></i-input>
+        </i-form-item>
+        <i-form-item label="lfid：" prop="lfid">
+          <i-input v-model="addLfid.lfid"></i-input>
+        </i-form-item>
+        <i-form-item label="点赞最大页数：" prop="page">
+          <i-input v-model="addLfid.page"></i-input>
+        </i-form-item>
+        <i-button :class="publicStyle.mr10" type="primary" @click="handleChangeLfidClick">
+          {{ isEdit ? '修改' : '添加' }}
+        </i-button>
+        <i-button type="error" @click="handleDialogDisplayClick(false)">取消</i-button>
+      </i-form>
+    </i-modal>
+  </i-layout>
 </template>
 
 <script src="./index.js"></script>
+<style src="./style.sass" scoped></style>

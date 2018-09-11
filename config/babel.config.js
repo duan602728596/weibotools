@@ -19,10 +19,10 @@ module.exports = {
       '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-syntax-dynamic-import',
       [
-        'component',
+        'import',
         {
-          libraryName: 'element-ui',
-          styleLibraryName: 'theme-chalk'
+          libraryName: 'iview',
+          libraryDirectory: 'src/components'
         }
       ]
     ]
