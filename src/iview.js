@@ -2,7 +2,7 @@
 import Vue from 'vue/dist/vue';
 import {
   Row, Col, Layout, Header, Content, Button, ButtonGroup, Table, TableColumn, Modal, Form, FormItem, Input, Message,
-  Collapse, Panel, Checkbox, Select, Option, Spin, Tag
+  Collapse, Panel, Checkbox, Select, Option, Spin, Tag, Avatar
 } from 'iview';
 import 'iview/src/styles/index.less';
 
@@ -25,5 +25,6 @@ Vue.component('i-select', Select);
 Vue.component('i-option', Option);
 Vue.component('i-spin', Spin);
 Vue.component('i-tag', Tag);
+Vue.component('i-avatar', Avatar);
 
 Vue.prototype.$message = Message;

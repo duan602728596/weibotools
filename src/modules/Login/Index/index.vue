@@ -20,8 +20,8 @@
       <i-table :columns="columns" :data="$store.getters['login/getLoginList']()"></i-table>
     </i-content>
     <!-- 弹出层 -->
-    <i-modal v-model="visible" title="登录微博账号">
-      <i-form ref="weiboLogin" label-suffix="：" :rules="rules" :model="weiboLogin" :footer-hide="true">
+    <i-modal v-model="visible" title="登录微博账号" :footer-hide="true">
+      <i-form ref="weiboLogin" label-suffix="：" :rules="rules" :model="weiboLogin">
         <i-form-item label="用户名" prop="username">
           <i-input v-model="weiboLogin.username" />
         </i-form-item>

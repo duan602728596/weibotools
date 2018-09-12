@@ -30,7 +30,7 @@ export default {
           title: '操作',
           key: 'handle',
           width: 320,
-          render: (h: Function, item: Object): Object=>{
+          render: (h: Function, scope: Object): Object=>{
             return h('i-button-group', [
               h('i-button', {
                 props: {
@@ -38,7 +38,7 @@ export default {
                   loading: this.btnLoading
                 },
                 on: {
-                  click: this.handleLoginAgainClick.bind(this, item, false)
+                  click: this.handleLoginAgainClick.bind(this, scope, false)
                 }
               }, ['重新登录']),
               h('i-button', {
@@ -47,7 +47,7 @@ export default {
                   loading: this.btnLoading
                 },
                 on: {
-                  click: this.handleLoginAgainClick.bind(this, item, true)
+                  click: this.handleLoginAgainClick.bind(this, scope, true)
                 }
               }, ['使用验证码重新登陆']),
               h('i-button', {
@@ -58,7 +58,7 @@ export default {
                   loading: this.btnLoading
                 },
                 on: {
-                  click: this.handleDeleteLoginClick.bind(this, item)
+                  click: this.handleDeleteLoginClick.bind(this, scope)
                 }
               }, ['删除'])
             ]);
@@ -94,7 +94,7 @@ export default {
           password: '',
           vcode: false
         };
-        if(this.$refs['weiboLogin']) this.$refs['weiboLogin'].resetFields();
+        if(this.$refs.weiboLogin) this.$refs.weiboLogin.resetFields();
       }
     },
     // 登录微博
@@ -188,28 +188,28 @@ export default {
     },
     // 登陆、获取验证码
     handleLoginClick(): void{
-      this.$refs['weiboLogin'].validate((valid: boolean): void=>{
+      this.$refs.weiboLogin.validate((valid: boolean): void=>{
         if(!valid) return void 0;
         this.prelogin();
       });
     },
     // 重新登陆
-    handleLoginAgainClick(item: Object, useVcode: boolean = false): void{
-      const { row }: { row: Object } = item;
+    handleLoginAgainClick(scope: Object, useVcode: boolean = false): void{
+      const { row }: { row: Object } = scope;
       this.weiboLogin.username = row.username;
       this.weiboLogin.password = row.password;
       this.weiboLogin.vcode = useVcode;
       this.prelogin();
     },
     // 删除
-    handleDeleteLoginClick(item: Object): void{
+    handleDeleteLoginClick(scope: Object): void{
       const _this: this = this;
       IndexedDB(config.indexeddb.name, config.indexeddb.version, {
         success(event: Event): void{
           const store: Object = this.getObjectStore(config.indexeddb.objectStore[0].name, true);
-          store.delete(item.row.username);
+          store.delete(scope.row.username);
           _this.$store.dispatch('login/deleteLoginInformation', {
-            index: item.$index
+            index: scope.index
           });
           this.close();
         }

@@ -29,7 +29,7 @@ export default {
           title: '操作',
           key: 'handle',
           width: 250,
-          render: (h: Function, item: Object): Object=>{
+          render: (h: Function, scope: Object): Object=>{
             return h('i-button-group', [
               h('i-button', {
                 props: {
@@ -37,7 +37,7 @@ export default {
                   loading: this.btnLoading
                 },
                 on: {
-                  click: this.handleDianzanClick.bind(this, item)
+                  click: this.handleDianzanClick.bind(this, scope)
                 }
               }, ['点赞']),
               h('i-button', {
@@ -46,7 +46,7 @@ export default {
                   loading: this.btnLoading
                 },
                 on: {
-                  click: this.handleEditLfidClick.bind(this, item)
+                  click: this.handleEditLfidClick.bind(this, scope)
                 }
               }, ['修改']),
               h('i-button', {
@@ -57,7 +57,7 @@ export default {
                   loading: this.btnLoading
                 },
                 on: {
-                  click: this.handleDeleteLfidClick.bind(this, item)
+                  click: this.handleDeleteLfidClick.bind(this, scope)
                 }
               }, ['删除'])
             ]);
@@ -98,12 +98,12 @@ export default {
           lfid: '',
           page: '1'
         };
-        if(this.$refs['addLfid']) this.$refs['addLfid'].resetFields();
+        if(this.$refs.addLfid) this.$refs.addLfid.resetFields();
       }
     },
     // 修改lfid
-    handleEditLfidClick(item: Object): void{
-      const { row }: { row: Object } = item;
+    handleEditLfidClick(scope: Object): void{
+      const { row }: { row: Object } = scope;
       this.addLfid.name = row.name;
       this.addLfid.lfid = row.lfid;
       this.addLfid.page = row.page;
@@ -113,7 +113,7 @@ export default {
     // 添加或修改一个lfid
     handleChangeLfidClick(): void{
       const _this: this = this;
-      this.$refs['addLfid'].validate(async(valid: boolean): Promise<void>=>{
+      this.$refs.addLfid.validate(async(valid: boolean): Promise<void>=>{
         if(!valid) return void 0;
         IndexedDB(config.indexeddb.name, config.indexeddb.version, {
           success(event: Event): void{
@@ -142,7 +142,7 @@ export default {
               data: list
             });
             if(!_this.isEdit){
-              _this.$refs['addLfid'].resetFields(); // 如果是编辑模式，不重置表单
+              _this.$refs.addLfid.resetFields(); // 如果是编辑模式，不重置表单
             }else{
               _this.visible = false;
             }
@@ -152,14 +152,14 @@ export default {
       });
     },
     // 删除一个lfid
-    handleDeleteLfidClick(item: Object): void{
+    handleDeleteLfidClick(scope: Object): void{
       const _this: this = this;
       IndexedDB(config.indexeddb.name, config.indexeddb.version, {
         success(event: Event): void{
           const store: Object = this.getObjectStore(config.indexeddb.objectStore[1].name, true);
-          store.delete(item.row.lfid);
+          store.delete(scope.row.lfid);
           _this.$store.dispatch('dianzan/deleteLfid', {
-            index: item.$index
+            index: scope.index
           });
           this.close();
         }
@@ -219,7 +219,7 @@ export default {
       }
     },
     // 单个lfid的点赞
-    async handleDianzanClick(item: Object): Promise<void>{
+    async handleDianzanClick(scope: Object): Promise<void>{
       this.btnLoading = true;
       try{
         const loginList: Object[] = await getLoginList();
@@ -232,7 +232,7 @@ export default {
           loginList[i].st = step.data.data.st;
           loginList[i].cookie += `; ${ step.cookie }`;
         }
-        await this.dianzanLfid(item.row, loginList);
+        await this.dianzanLfid(scope.row, loginList);
         this.btnLoading = false;
       }catch(err){
         this.btnLoading = false;
