@@ -45,4 +45,4 @@
 </template>
 
 <script src="./index.js"></script>
-<style src="./style.sass" scoped></style>
+<style src="./style.sass" lang="sass" scoped></style>
