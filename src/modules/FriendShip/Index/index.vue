@@ -1,7 +1,7 @@
 <template>
   <i-layout :class="publicStyle.layout">
-    <i-header :class="classNames(publicStyle.header, 'clearfix')">
-      <i-select class="select" :class="classNames(publicStyle.fl, publicStyle.mr10, publicStyle.mt17)"
+    <i-header :class="$classNames(publicStyle.header, 'clearfix')">
+      <i-select class="select" :class="$classNames(publicStyle.fl, publicStyle.mr10, publicStyle.mt17)"
         :disabled="isLoading"
         v-model="selectLoginCookie"
         @on-change="handleLoginChange($event)"
@@ -12,7 +12,7 @@
           :value="item.cookie"
         />
       </i-select>
-      <i-button :class="classNames(publicStyle.fl, publicStyle.mt17)"
+      <i-button :class="$classNames(publicStyle.fl, publicStyle.mt17)"
         type="error"
         icon="ios-outlet"
         @click="handleQuguanAllClick"

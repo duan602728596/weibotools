@@ -18,4 +18,4 @@ const app: Vue = new Vue({
   template: '<App />'
 });
 
-Vue.prototype.classNames = classNames;
+Vue.prototype.$classNames = classNames;
