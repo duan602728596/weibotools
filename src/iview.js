@@ -1,4 +1,4 @@
-/* element按需加载 */
+/* iview按需加载 */
 import Vue from 'vue/dist/vue';
 import {
   Row, Col, Layout, Header, Content, Button, ButtonGroup, Table, TableColumn, Modal, Form, FormItem, Input, Message,
