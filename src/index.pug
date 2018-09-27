@@ -10,5 +10,5 @@ html
   body
     div.vue-app#vue-app(data-app)
     script(type='text/javascript' src=require('./weibo-pattlock'))
-    if htmlWebpackPlugin.options.NODE_ENV === 'development'
+    if htmlWebpackPlugin.options.mode === 'development'
       script(type='text/javascript' src=imports.dll)
