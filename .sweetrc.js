@@ -34,6 +34,7 @@ export default {
     }
   ],
   js: {
+    ecmascript: true,
     plugins: [['import', { libraryName: 'iview', libraryDirectory: 'src/components' }]],
     exclude: /(dll\.js|weibo-pattlock\.js|node_modules)/
   },
