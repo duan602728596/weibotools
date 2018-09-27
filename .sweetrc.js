@@ -1,7 +1,7 @@
 import path from 'path';
 import process from 'process';
 
-const isDevelopment: string = process.env.NODE_ENV === 'development';
+const isDevelopment: boolean = process.env.NODE_ENV === 'development';
 
 export default {
   frame: 'vue',
