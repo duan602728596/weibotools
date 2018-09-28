@@ -7,7 +7,7 @@
     "runel": "cross-env NODE_ENV=development electron ./",
     "asar": "asar pack ../asar ../app.asar",
     "dll": "milktea dll",
-    "start": "cross-env NODE_ENV=development milktea start",
+    "start": "npm run cleanbuild && cross-env NODE_ENV=development milktea start",
     "build": "npm run cleanbuild && cross-env NODE_ENV=production milktea build",
     "cleanbuild": "rimraf ./build",
     "npmi": "npm install --production",
