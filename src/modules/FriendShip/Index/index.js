@@ -35,7 +35,7 @@ export default {
         {
           title: '用户名',
           key: 'user.screen_name',
-          render: (h: Function, item: Object): string=>{
+          render: (h: Function, item: Object): Object=>{
             return h('span', [item.row.user.screen_name]);
           }
         },
