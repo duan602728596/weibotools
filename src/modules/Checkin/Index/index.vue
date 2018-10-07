@@ -41,13 +41,13 @@
                 <span class="list-item-status-success" v-else-if="item2.code === '100000'">{{ item2.msg }}</span>
                 <span class="list-item-status-fail" v-else>{{ item2.msg }}</span>
                 <i-button class="manual-checkin-btn"
-                    :class="publicStyle.fr"
-                    size="small"
-                    title="手动签到"
-                    icon="ios-create-outline"
-                    shape="circle"
-                    v-if="!(item2.code === '100000' || item2.code === 382004)"
-                    @click="handleManualCheckinClick(item, item2)"
+                  :class="publicStyle.fr"
+                  size="small"
+                  title="手动签到"
+                  icon="ios-create-outline"
+                  shape="circle"
+                  v-if="!(item2.code === '100000' || item2.code === 382004)"
+                  @click="handleManualCheckinClick(item, item2)"
                 />
               </li>
               <li class="list-item list-item-space" v-if="item.children.length % 2 !== 0"></li>
