@@ -78,10 +78,12 @@ export default {
     async handleLoginChange(value: string): Promise<void>{
       this.isLoading = true;
       this.checkboxValue = [];
+
       try{
         let page: number = 1;
         let list: [] = [];
         let cookie: ?string = null;
+
         while(page){
           const res: Object = await getFriendShipList(value, page);
           const { data }: { data: Object } = res.data;
@@ -94,6 +96,7 @@ export default {
             page += 1;
           }
         }
+
         this.friendShipListCookie = cookie;
         this.$store.dispatch('friendship/frindShipList', {
           data: list
@@ -148,6 +151,7 @@ export default {
         } = await getSt(this.selectLoginCookie);
         const { st }: { st: string } = step.data.data;
         const cookie: string = `${ this.selectLoginCookie }; ${ step.cookie }; ${ this.friendShipListCookie }`;
+
         for(const item: Object of itemList){
           const res: Object = await friendshipsApi(cookie, item.user.id, st, action);
           if(res.ok === 1){
@@ -161,6 +165,7 @@ export default {
             this.$message.error(`${ item.user.screen_name }：${ res.msg }`);
           }
         }
+
         if(action === false){
           this.$refs.friendship.selectAll(false);
           this.checkboxValue = [];
@@ -168,6 +173,7 @@ export default {
         }else{
           this.$message.success('关注成功！');
         }
+
         // change ui
         this.$store.dispatch('friendship/frindShipList', {
           data: [...data]

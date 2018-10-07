@@ -101,11 +101,13 @@ export default {
     async loginWeibo(id: ?string): Promise<void>{
       try{
         const _this: this = this;
+
         // 登录
         const step4: {
           data: Object,
           cookie: string
         } = await login(this.weiboLogin.username, this.weiboLogin.password, id);
+
         // 添加数据
         IndexedDB(config.indexeddb.name, config.indexeddb.version, {
           success(event: Event): void{
@@ -117,6 +119,7 @@ export default {
               cookie: step4.cookie
             };
             store.put(data);
+
             // 修改ui
             const list: [] = _this.$store.getters['login/getLoginList']();
             let index: number = -1;
@@ -126,11 +129,13 @@ export default {
                 break;
               }
             }
+
             if(index === -1){
               list.push(data);
             }else{
               list[index] = data;
             }
+
             _this.$store.dispatch('login/loginList', {
               data: list
             });
@@ -155,6 +160,7 @@ export default {
           encodeURIComponent(data.path_enc),
           encodeURIComponent(data.data_enc)
         );
+
         if(step3.code === '100000'){
           this.loginWeibo(step2.id);
         }else{
@@ -172,6 +178,7 @@ export default {
       try{
         // 判断是否需要验证码
         const step1: Object = await prelogin(btoa(this.weiboLogin.username));
+
         if(('showpin' in step1 && step1.showpin === 1) || ('smsurl' in step1) || this.weiboLogin.vcode === true){
           // 获取验证码
           const step2: Object = await pattern(this.weiboLogin.username);
