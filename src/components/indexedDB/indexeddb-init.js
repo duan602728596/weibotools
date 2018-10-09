@@ -15,12 +15,14 @@ IndexedDB(config.indexeddb.name, config.indexeddb.version, {
     objectStore.map((item: Object, index: number): void=>{
       if(!this.hasObjectStore(item.name)){
         const keys: Object[] = [];
+
         for(let i: number = 1, j: number = item.key.length; i < j; i++){
           keys.push({
             name: item.key[i],
             index: item.key[i]
           });
         }
+
         this.createObjectStore(item.name, item.key[0], keys);
       }
     });
