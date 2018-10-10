@@ -17,7 +17,7 @@
         <router-link class="imgLink" to="/Dianzan" title="一键点赞">
           <img src="./image/l3.jpg">
         </router-link>
-        <router-link to="/Checkin">一键点赞</router-link>
+        <router-link to="/Dianzan">一键点赞</router-link>
       </i-col>
       <i-col class="group" :xs="8" :sm="8" :md="6" :lg="6" :xl="6">
         <router-link class="imgLink" to="/FriendShip" title="关注列表">
