@@ -5,8 +5,11 @@ import config from '../../../components/config/config';
 import { getLoginList } from '../../../components/indexedDB/select';
 import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import { prelogin, pattern, verify, login } from './request';
+import Header from './Header.vue';
+import Modal from './Modal.vue';
 
 export default {
+  components: { Header, Modal },
   data(): Object{
     return {
       publicStyle,
@@ -65,17 +68,6 @@ export default {
           }
         }
       ],
-      // 校验规则
-      rules: {
-        username: {
-          required: true,
-          message: '请输入用户名！'
-        },
-        password: {
-          required: true,
-          message: '请输入密码！'
-        }
-      },
       // 表单
       weiboLogin: {
         username: '',
@@ -94,19 +86,38 @@ export default {
           password: '',
           vcode: false
         };
-        if(this.$refs.weiboLogin) this.$refs.weiboLogin.resetFields();
+
+        const weiboLoginRef: ?Object = this.$refs.weiboLogin;
+        if(weiboLoginRef) weiboLoginRef.$refs.weiboLogin.resetFields();
       }
     },
     // 登录微博
     async loginWeibo(id: ?string): Promise<void>{
       try{
         const _this: this = this;
+        const { username, password }: { username: string, password: string } = this.weiboLogin;
 
         // 登录
-        const step4: {
-          data: Object,
-          cookie: string
-        } = await login(this.weiboLogin.username, this.weiboLogin.password, id);
+        const step4: { data: Object, cookie: string } = await login(username, password, id);
+        const callback: Function = (_this: Object, data: Array): void=>{
+          // 修改ui
+          const list: [] = _this.$store.getters['login/getLoginList']();
+          let index: number = -1;
+
+          for(let i: number = 0, j: number = list.length; i < j; i++){
+            if(username === list[i].username){
+              index = i;
+              break;
+            }
+          }
+
+          if(index === -1) list.push(data);
+          else list[index] = data;
+
+          _this.$store.dispatch('login/loginList', { data: list });
+          _this.$message.success('登陆成功！');
+          _this.visible = false;
+        };
 
         // 添加数据
         IndexedDB(config.indexeddb.name, config.indexeddb.version, {
@@ -118,29 +129,9 @@ export default {
               loginTime: moment().format('YYYY-MM-DD HH:mm:ss'),
               cookie: step4.cookie
             };
+
             store.put(data);
-
-            // 修改ui
-            const list: [] = _this.$store.getters['login/getLoginList']();
-            let index: number = -1;
-            for(let i: number = 0, j: number = list.length; i < j; i++){
-              if(_this.weiboLogin.username === list[i].username){
-                index = i;
-                break;
-              }
-            }
-
-            if(index === -1){
-              list.push(data);
-            }else{
-              list[index] = data;
-            }
-
-            _this.$store.dispatch('login/loginList', {
-              data: list
-            });
-            _this.$message.success('登陆成功！');
-            _this.visible = false;
+            callback(_this, data);
             this.close();
           }
         });
@@ -161,11 +152,8 @@ export default {
           encodeURIComponent(data.data_enc)
         );
 
-        if(step3.code === '100000'){
-          this.loginWeibo(step2.id);
-        }else{
-          this.$message.error(`（${ step3.code }）${ step3.msg }`);
-        }
+        if(step3.code === '100000') this.loginWeibo(step2.id);
+        else this.$message.error(`（${ step3.code }）${ step3.msg }`);
       }catch(err){
         console.error(err);
         this.$message.error('验证失败！');
@@ -182,6 +170,7 @@ export default {
         if(('showpin' in step1 && step1.showpin === 1) || ('smsurl' in step1) || this.weiboLogin.vcode === true){
           // 获取验证码
           const step2: Object = await pattern(this.weiboLogin.username);
+
           hint(step2.path_enc, step2.id);
           this._verifyCallback = this.verifyCallback.bind(this, step2);
           document.addEventListener('weibo-pattlock', this._verifyCallback, false);
@@ -195,7 +184,9 @@ export default {
     },
     // 登陆、获取验证码
     handleLoginClick(): void{
-      this.$refs.weiboLogin.validate((valid: boolean): void=>{
+      const weiboLoginRef: Object = this.$refs.weiboLogin;
+
+      weiboLoginRef.$refs.weiboLogin.validate((valid: boolean): void=>{
         if(!valid) return void 0;
         this.prelogin();
       });
@@ -203,6 +194,7 @@ export default {
     // 重新登陆
     handleLoginAgainClick(scope: Object, useVcode: boolean = false): void{
       const { row }: { row: Object } = scope;
+
       this.weiboLogin.username = row.username;
       this.weiboLogin.password = row.password;
       this.weiboLogin.vcode = useVcode;
@@ -214,6 +206,7 @@ export default {
       IndexedDB(config.indexeddb.name, config.indexeddb.version, {
         success(event: Event): void{
           const store: Object = this.getObjectStore(config.indexeddb.objectStore[0].name, true);
+
           store.delete(scope.row.username);
           _this.$store.dispatch('login/deleteLoginInformation', {
             index: scope.index

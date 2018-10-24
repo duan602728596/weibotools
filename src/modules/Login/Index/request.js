@@ -11,6 +11,7 @@ export function prelogin(usernameBase64: string): Promise{
 export function pattern(username: string): Promise{
   const uri: string = 'https://captcha.weibo.com/api/pattern/get?'
     + `ver=1.0.0&source=ssologin&usrname=${ username }&line=160&side=100&radius=30&_rnd=${ Math.random() }`;
+
   return jsonp(uri);
 }
 
@@ -18,6 +19,7 @@ export function pattern(username: string): Promise{
 export function verify(id: string, username: string, pathEnc: string, dataEnc: string): Promise{
   const uri: string = 'https://captcha.weibo.com/api/pattern/verify?ver=1.0.0&source=ssologin'
     + `&id=${ id }&usrname=${ username }&path_enc=${ pathEnc }&data_enc=${ dataEnc }`;
+
   return jsonp(uri);
 }
 
@@ -27,9 +29,11 @@ export function login(username: string, password: string, id: ?string): Promise{
     username,
     password
   };
+
   if(id) query.vid = id;
 
   const data: string = queryString.stringify(query);
+
   return new Promise((resolve: Function, reject: Function): void=>{
     request({
       uri: 'https://passport.weibo.cn/sso/login',

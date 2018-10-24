@@ -44,7 +44,7 @@ export default {
       '@primary-color': '#9254de',
       '@layout-header-background': '#9254de'
     },
-    include: /node_modules[\\/]iview/,
+    include: /node_modules[\\/]_?iview/,
     publicPath: '../'
   },
   html: [{ template: path.join(__dirname, 'src/index.pug') }]
