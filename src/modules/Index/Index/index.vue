@@ -3,25 +3,25 @@
     <i-row>
       <i-col class="group" :xs="8" :sm="8" :md="6" :lg="6" :xl="6">
         <router-link class="imgLink" to="/Login" title="账号登录">
-          <img src="./image/l1.jpg">
+          <img src="./image/l1.webp">
         </router-link>
         <router-link to="/Login">微博账号登录</router-link>
       </i-col>
       <i-col class="group" :xs="8" :sm="8" :md="6" :lg="6" :xl="6">
         <router-link class="imgLink" to="/Checkin" title="一键签到">
-          <img src="./image/l2.jpg">
+          <img src="./image/l2.webp">
         </router-link>
         <router-link to="/Checkin">超级话题一键签到</router-link>
       </i-col>
       <i-col class="group" :xs="8" :sm="8" :md="6" :lg="6" :xl="6">
         <router-link class="imgLink" to="/Dianzan" title="一键点赞">
-          <img src="./image/l3.jpg">
+          <img src="./image/l3.webp">
         </router-link>
         <router-link to="/Dianzan">一键点赞</router-link>
       </i-col>
       <i-col class="group" :xs="8" :sm="8" :md="6" :lg="6" :xl="6">
         <router-link class="imgLink" to="/FriendShip" title="关注列表">
-          <img src="./image/l4.jpg">
+          <img src="./image/l4.webp">
         </router-link>
         <router-link to="/FriendShip">关注管理</router-link>
       </i-col>
@@ -32,10 +32,10 @@
         <p class="text">扫一扫，打赏一下可怜的作者。嘤嘤嘤...</p>
         <i-row>
           <i-col :span="12">
-            <img class="shoukuan" src="./image/wx.jpg">
+            <img class="shoukuan" src="./image/wx.webp">
           </i-col>
           <i-col :span="12">
-            <img class="shoukuan" src="./image/zfb.jpg">
+            <img class="shoukuan" src="./image/zfb.webp">
           </i-col>
         </i-row>
       </div>
