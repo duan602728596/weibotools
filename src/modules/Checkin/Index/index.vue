@@ -1,20 +1,7 @@
 <template>
   <i-layout :class="publicStyle.layout">
     <!-- 顶部菜单 -->
-    <i-header :class="$classNames(publicStyle.header, 'clearfix')">
-      <h4 :class="$classNames(publicStyle.fl, publicStyle.title)">超级话题一键签到</h4>
-      <router-link :class="publicStyle.fr" to="/">
-        <i-button type="error" icon="md-power">返回</i-button>
-      </router-link>
-      <i-button :class="$classNames(publicStyle.fr, publicStyle.mr10, publicStyle.mt17)"
-        type="warning"
-        icon="ios-paper-plane-outline"
-        :loading="btnLoading"
-        @click="handleAutoCheckinClick"
-      >
-        {{ btnLoading === false ? '一键签到' : '签到中...' }}
-      </i-button>
-    </i-header>
+    <Header :loading="btnLoading" :onClick="handleAutoCheckinClick" />
     <!-- 签到列表 -->
     <i-content :class="publicStyle.main">
       <i-collapse v-model="activeNames">
@@ -34,20 +21,21 @@
           </i-button>
           <template slot="content">
             <ul class="list clearfix" v-if="item.children && item.children.length > 0">
-              <li class="list-item clearfix" v-for="item2 in item.children">
-                <img class="list-item-image" :src="item2.pic">
-                <b class="list-item-title">{{ item2.title_sub }}</b>
-                <span class="list-item-status" v-if="item2.code === undefined">签到中...</span>
-                <span class="list-item-status-success" v-else-if="item2.code === '100000'">{{ item2.msg }}</span>
-                <span class="list-item-status-fail" v-else>{{ item2.msg }}</span>
+              <!-- 渲染签到 -->
+              <li class="list-item clearfix" v-for="childrenItem in item.children">
+                <img class="list-item-image" :src="childrenItem.pic">
+                <b class="list-item-title">{{ childrenItem.title_sub }}</b>
+                <span class="list-item-status" v-if="childrenItem.code === undefined">签到中...</span>
+                <span class="list-item-status-success" v-else-if="childrenItem.code === '100000'">{{ childrenItem.msg }}</span>
+                <span class="list-item-status-fail" v-else>{{ childrenItem.msg }}</span>
                 <i-button class="manual-checkin-btn"
                   :class="publicStyle.fr"
                   size="small"
                   title="手动签到"
                   icon="ios-create-outline"
                   shape="circle"
-                  v-if="!(item2.code === '100000' || item2.code === 382004)"
-                  @click="handleManualCheckinClick(item, item2)"
+                  v-if="!(childrenItem.code === '100000' || childrenItem.code === 382004)"
+                  @click="handleManualCheckinClick(item, childrenItem)"
                 />
               </li>
               <li class="list-item list-item-space" v-if="item.children.length % 2 !== 0"></li>

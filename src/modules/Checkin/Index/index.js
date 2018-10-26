@@ -2,8 +2,10 @@ import publicStyle from '../../../components/publicStyle/publicStyle.sass';
 import { getLoginList } from '../../../components/indexedDB/select';
 import { getChaohuaList, checkIn } from './request';
 import { sleep } from '../../../utils';
+import Header from './Header.vue';
 
 export default {
+  components: { Header },
   data(): Object{
     return {
       publicStyle,
@@ -22,35 +24,34 @@ export default {
         const item2: Object = item.children[i2];
         const step1: Object = await checkIn(item.cookie, item2.containerid);
 
-        if(step1){
-          let code: ?(number | string) = null;
-          let msg: ?string = null;
-
-          if(step1.code === '100000'){
-            // 签到成功
-            if('error_code' in step1.data){
-              code = step1.data.error_code;
-              msg = step1.data.error_msg;
-            }else{
-              code = step1.code;
-              msg = `${ step1.data?.alert_title }，${ step1.data?.alert_subtitle }`;
-            }
-          }else{
-            // 其他情况
-            code = step1.code;
-            msg = step1.msg;
-          }
-          item2.code = code;
-          item2.msg = msg;
-          i2++;
-
-          // 修改ui
-          this.$store.dispatch('checkin/loginList', {
-            data: list
-          });
-        }else{
+        // 签到失败
+        if(!step1){
           this.$message.error(`【${ item2.title_sub }】签到失败。正在重新签到该超话...`);
+          await sleep(1500);
+          return void 0;
         }
+
+        let code: ?(number | string) = null;
+        let msg: ?string = null;
+
+        if(step1.code === '100000'){
+          // 签到成功
+          const isErr: boolean = 'error_code' in step1.data;
+
+          code = isErr ? step1.data.error_code : tep1.code;
+          msg = isErr ? step1.data.error_msg : `${ step1.data?.alert_title }，${ step1.data?.alert_subtitle }`;
+        }else{
+          // 其他情况
+          code = step1.code;
+          msg = step1.msg;
+        }
+
+        item2.code = code;
+        item2.msg = msg;
+        i2++;
+
+        // 修改ui
+        this.$store.dispatch('checkin/loginList', { data: list });
         await sleep(1500);
       }
     },
@@ -59,17 +60,18 @@ export default {
       const list: [] = [];
 
       rawArray.forEach((value: Object, index: number, arr: []): void=>{
-        if(value.card_type === 8){
-          const s: string = value.scheme.match(/containerid=[a-zA-Z0-9]+/)[0];
-          const containerid: string = s.split('=')[1];
+        if(value.card_type !== 8) return void 0;
 
-          list.push({
-            pic: value.pic,
-            title_sub: value.title_sub,
-            containerid
-          });
-        }
+        const s: string = value.scheme.match(/containerid=[a-zA-Z0-9]+/)[0];
+        const containerid: string = s.split('=')[1];
+
+        list.push({
+          pic: value.pic,
+          title_sub: value.title_sub,
+          containerid
+        });
       });
+
       return list;
     },
     // 获取超级话题列表
@@ -86,11 +88,8 @@ export default {
 
         l = l.concat(this.chaohuaListData(card_group)); // 循环card_group，提取数据
 
-        if('since_id' in cardlistInfo){
-          sinceId = cardlistInfo.since_id;
-        }else{
-          isBreak = false;
-        }
+        if('since_id' in cardlistInfo) sinceId = cardlistInfo.since_id;
+        else isBreak = false;
       }
 
       item.children = l;
@@ -123,19 +122,15 @@ export default {
         // 获取超级话题列表
         if(!('children' in item)) await this.getChaohuaList(item);
 
-        // 修改ui
-        this.$store.dispatch('checkin/loginList', {
-          data: list
-        });
+        // 获取列表后修改ui
+        this.$store.dispatch('checkin/loginList', { data: list });
 
         // 签到
         await this.checkIn(item, list);
         item.status = 1;
 
-        // 修改ui
-        this.$store.dispatch('checkin/loginList', {
-          data: list
-        });
+        // 签到后修改ui
+        this.$store.dispatch('checkin/loginList', { data: list });
         this.btnLoading = false;
       }catch(err){
         console.error(err);
@@ -153,13 +148,10 @@ export default {
 
         if(step1.code === '100000'){
           // 签到成功
-          if('error_code' in step1.data){
-            code = step1.data.error_code;
-            msg = step1.data.error_msg;
-          }else{
-            code = step1.code;
-            msg = `${ step1.data?.alert_title }，${ step1.data?.alert_subtitle }`;
-          }
+          const isErr: boolean = 'error_code' in step1.data;
+
+          code = isErr ? step1.data.error_code : step1.code;
+          msg = isErr ? step1.data.error_msg : `${ step1.data?.alert_title }，${ step1.data?.alert_subtitle }`;
         }else{
           // 其他情况
           code = step1.code;
