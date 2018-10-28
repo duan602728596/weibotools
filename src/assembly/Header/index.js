@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import classNames from 'classnames';
-import { Layout } from 'antd';
+import { Layout, Icon } from 'antd';
 import style from './style.sass';
 
 type NavOptionsItem = {
-  name: string,
+  name: string | React.Element,
   href: string
 };
 
 const navOptions: Array<NavOptionsItem> = [
   {
-    name: '微博工具',
+    name: <Icon className={ style.home } type="home" theme="twoTone" />,
     href: '/'
   },
   {
