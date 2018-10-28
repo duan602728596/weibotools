@@ -9,6 +9,7 @@ class ModuleLayout extends Component{
       <Content>
         <Switch>
           <Route path="/" component={ Index } exact={ true } />
+          <Route path="/Index" component={ Index } exact={ true } />
         </Switch>
       </Content>
     );
