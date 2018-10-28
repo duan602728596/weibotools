@@ -17,7 +17,7 @@ function createWindow(){
     win.webContents.openDevTools();
   }
 
-  // 加载应用的index.html。
+  // 加载应用的index.html
   win.loadURL(url.format({
     pathname: path.join(__dirname, '../build/index.html'),
     protocol: 'file:',
@@ -28,8 +28,7 @@ function createWindow(){
   Menu.setApplicationMenu(null);
 
   win.on('closed', ()=>{
-    // 解除窗口对象的引用，通常而言如果应用支持多个窗口的话，你会在一个数组里
-    // 存放窗口对象，在窗口关闭的时候应当删除相应的元素。
+    // 解除窗口对象的引用，通常而言如果应用支持多个窗口的话，你会在一个数组里存放窗口对象，在窗口关闭的时候应当删除相应的元素。
     win = null;
   });
 }
@@ -44,8 +43,7 @@ app.on('window-all-closed', function(){
 });
 
 app.on('activate', function(){
-  // 对于OS X系统，当dock图标被点击后会重新创建一个app窗口，并且不会有其他
-  // 窗口打开
+  // 对于OS X系统，当dock图标被点击后会重新创建一个app窗口，并且不会有其他窗口打开
   if(win === null){
     createWindow();
   }
