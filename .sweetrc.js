@@ -65,6 +65,7 @@ export default {
     modules: false,
     modifyVars: {
       // https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
+      '@primary-color': '#f759ab'
     },
     include: /node_modules[\\/]_?antd/,
     publicPath: '../'
