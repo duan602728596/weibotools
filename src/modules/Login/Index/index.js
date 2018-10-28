@@ -220,7 +220,8 @@ class Index extends Component{
         <div className={ publicStyle.mb10 }>
           <Button type="primary" icon="login" onClick={ this.handleLoginModalDisplayClick.bind(this, true) }>登陆账号</Button>
         </div>
-        <Table rowKey="username"
+        <Table size="middle"
+          rowKey="username"
           dataSource={ this.props.userList }
           columns={ this.columus() }
           bordered={ true }
