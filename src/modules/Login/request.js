@@ -1,4 +1,4 @@
-import { jsonP } from '../../../utils';
+import { jsonP } from '../../utils';
 const queryString: Object = global.require('querystring');
 const request: Function = global.require('request');
 

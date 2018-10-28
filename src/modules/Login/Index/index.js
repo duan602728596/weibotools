@@ -9,8 +9,8 @@ import publicStyle from '../../../components/publicStyle/publicstyle.sass';
 import { userList } from '../store/reducer';
 import style from './style.sass';
 import LoginModal from './LoginModal';
-import { preLogin, requestVerificationCode, gestureVerify, login } from './request';
-import { queryUserList, insertLoginItem, updateLoginItem, queryUsernameIsExists, deleteUserItem } from './sql';
+import { preLogin, requestVerificationCode, gestureVerify, login } from '../request';
+import { queryUserList, insertLoginItem, updateLoginItem, queryUsernameIsExists, deleteUserItem } from '../sql';
 
 /* state */
 const state: Function = createStructuredSelector({

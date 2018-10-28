@@ -1,4 +1,4 @@
-import initWebSql from '../../../components/webSql/webSql';
+import initWebSql from '../../components/webSql/webSql';
 
 /**
  * 查询用户列表

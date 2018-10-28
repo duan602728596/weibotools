@@ -6,7 +6,7 @@ const initData: Object = {
 };
 
 /* Action */
-export const userList: Function = createAction('用户账号列表');
+export const userList: Function = createAction('login-用户账号列表');
 
 /* reducer */
 const reducer: Function = handleActions({
