@@ -1,0 +1,13 @@
+- var imports = require('./imports');
+
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1')
+    title 微博工具 - v1.0.0
+  body
+    div.app#app
+    script(type='text/javascript' src=require('./weibo-pattlock'))
+    if htmlWebpackPlugin.options.mode === 'development'
+      script(type='text/javascript' src=imports.dll)
