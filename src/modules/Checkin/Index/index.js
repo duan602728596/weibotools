@@ -38,7 +38,7 @@ export default {
           // 签到成功
           const isErr: boolean = 'error_code' in step1.data;
 
-          code = isErr ? step1.data.error_code : tep1.code;
+          code = isErr ? step1.data.error_code : step1.code;
           msg = isErr ? step1.data.error_msg : `${ step1.data?.alert_title }，${ step1.data?.alert_subtitle }`;
         }else{
           // 其他情况
