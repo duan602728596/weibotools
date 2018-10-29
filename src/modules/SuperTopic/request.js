@@ -1,0 +1,56 @@
+const request: Function = global.require('request');
+
+/**
+ * 微博获取超话列表
+ * @param { string } cookie
+ * @param { ?string } sinceId
+ */
+export function requestSuperTopicList(cookie: string, sinceId: ?string): Promise{
+  let url: string = 'https://m.weibo.cn/api/container/getIndex?containerid=100803_-_page_my_follow_super';
+
+  if(sinceId) url += `&since_id=${ encodeURIComponent(sinceId) }`;
+
+  return new Promise((resolve: Function, reject: Function): void=>{
+    request({
+      uri: url,
+      method: 'GET',
+      headers: { Cookie: cookie }
+    }, (err: any, res: Object, data: string): void=>{
+      if(err){
+        reject(err);
+      }else{
+        resolve(JSON.parse(data));
+      }
+    });
+  }).catch((err: any): void=>{
+    console.error(err);
+  });
+}
+
+/**
+ * 签到
+ * @param { string } cookie
+ * @param { string } containerId
+ * 新接口可以使用【POST：https://m.weibo.cn/api/container/button?
+ * sign=686d57&request_url=http%3A%2F%2Fi.huati.weibo.com%2Fmobile
+ * %2Fsuper%2Factive_checkin%3Fpageid%3D10080848fab43dc8c0cce225e66ce7109d399c】接口，
+ * 地址来自于超话地址的pageInfo.toolbar_menus[0].params.action
+ */
+export function checkIn(cookie: string, containerId: string): Promise{
+  return new Promise((resolve: Function, reject: Function): void=>{
+    request({
+      uri: `https://weibo.com/p/aj/general/button?api=http://i.huati.weibo.com/aj/super/checkin&id=${ containerId }`,
+      method: 'GET',
+      headers: { Cookie: cookie },
+      timeout: 30000
+    }, (err: any, res: Object, data: string): void=>{
+      if(err){
+        resolve(null); // 签到失败，手动签到
+      }else{
+        resolve(JSON.parse(data));
+      }
+    });
+  }).catch((err: any): void=>{
+    console.error(err);
+  });
+}

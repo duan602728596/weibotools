@@ -11,7 +11,7 @@ export const userList: Function = createAction('login-用户账号列表');
 /* reducer */
 const reducer: Function = handleActions({
   [userList]: ($$state: Immutable.Map, action: Object): Immutable.Map=>{
-    const { data }: Object = action.payload;
+    const { data }: Array = action.payload;
     return $$state.set('userList', List(data));
   }
 }, fromJS(initData));
