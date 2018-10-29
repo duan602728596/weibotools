@@ -18,6 +18,11 @@ const options: Array<OptionItem> = [
     id: 'superTopic_checkIn',
     name: '超话签到',
     href: '/SuperTopic/CheckIn'
+  },
+  {
+    id: 'superTopic_follow',
+    name: '超话关注',
+    href: '/SuperTopic/Follow'
   }
 ];
 
@@ -30,6 +35,7 @@ class ModuleLayout extends Component{
         <Switch>
           <Route path="/SuperTopic" component={ Index } exact={ true } />
           <Route path="/SuperTopic/CheckIn" component={ Index } exact={ true } />
+          <Route path="/SuperTopic/Follow" component={ (): string => '功能开发中...' } exact={ true } />
         </Switch>
       </Content>
     ];
