@@ -6,9 +6,9 @@ const { app, BrowserWindow, Menu } = require('electron');
 let win = null;
 
 function createWindow(){
-  // 创建窗口.
+  // 创建窗口
   win = new BrowserWindow({
-    width: 1200,
+    width: 1400,
     height: 800
   });
 

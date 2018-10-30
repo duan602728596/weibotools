@@ -4,10 +4,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { createSelector, createStructuredSelector } from 'reselect';
 import classNames from 'classnames';
-import { Button, Collapse, Icon, Avatar } from 'antd';
+import { Button, Collapse, Icon, Avatar, message } from 'antd';
 import publicStyle from '../../../components/publicStyle/publicstyle.sass';
 import style from './style.sass';
-import { userList, superTopicLoading, checkInList, resetList } from '../store/reducer';
+import { userList } from '../store/reducer';
+import { superTopicLoading, checkInList } from '../store/checkIn';
 import { queryUserList } from '../sql';
 import { requestSuperTopicList, checkIn } from '../request';
 import { sleep } from '../../../utils';
@@ -19,11 +20,11 @@ const state: Function = createStructuredSelector({
     ($$data: ?Immutable.Map): Array => $$data ? $$data.get('userList').toJS() : []
   ),
   superTopicLoading: createSelector(
-    ($$state: Immutable.Map): ?Immutable.Map => $$state.has('superTopic') ? $$state.get('superTopic') : null,
+    ($$state: Immutable.Map): ?Immutable.Map => $$state.has('superTopic') ? $$state.get('superTopic').get('checkIn') : null,
     ($$data: ?Immutable.Map): boolean => $$data ? $$data.get('superTopicLoading') : false
   ),
   checkInList: createSelector(
-    ($$state: Immutable.Map): ?Immutable.Map => $$state.has('superTopic') ? $$state.get('superTopic') : null,
+    ($$state: Immutable.Map): ?Immutable.Map => $$state.has('superTopic') ? $$state.get('superTopic').get('checkIn') : null,
     ($$data: ?Immutable.Map): Object => $$data ? $$data.get('checkInList') : {}
   )
 });
@@ -33,8 +34,7 @@ const dispatch: Function = (dispatch: Function): Object=>({
   action: bindActionCreators({
     userList,
     superTopicLoading,
-    checkInList,
-    resetList
+    checkInList
   }, dispatch)
 });
 
@@ -61,8 +61,10 @@ class Index extends Component{
   // 刷新微博账户列表
   handleRefreshUserListClick: Function = async(event: ?Event): Promise<void>=>{
     const { rows }: Object = await queryUserList();
+    const { userList, checkInList }: Object = this.props.action;
 
-    this.props.action.resetList({ data: rows });
+    userList({ data: rows });
+    checkInList({ data: {} });
   };
   // 签到单个数据
   async handleCheckInAnItemClick(listItem: Object, userItem: Object, event: ?Event): Promise<void>{
@@ -102,6 +104,7 @@ class Index extends Component{
       await this.handleCheckInAnItemClick(item, userItem);
       await sleep(1500);
     }
+    message.info(`【${ userItem.username }】签到完毕。`);
   }
   // 格式化超话数据
   formatData(list: Array): Array{
@@ -149,6 +152,7 @@ class Index extends Component{
       await this.checkInAUserItemClick(userItem); // 签到
     }catch(err){
       console.error(err);
+      message.error(`【${ userItem.username }】获取超话列表失败！`);
     }
 
     if(event) action.superTopicLoading(false);
@@ -248,7 +252,13 @@ class Index extends Component{
           >
             一键签到
           </Button>
-          <Button type="danger" icon="reload" onClick={ this.handleRefreshUserListClick }>刷新微博账户列表</Button>
+          <Button type="danger"
+            icon="reload"
+            loading={ superTopicLoading }
+            onClick={ this.handleRefreshUserListClick }
+          >
+            刷新微博账户列表
+          </Button>
         </div>
         {
           userList.length === 0 ? (
