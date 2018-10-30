@@ -19,7 +19,7 @@
 
 ## 技术栈
 
-Pug + Sass + ECMAScript + Vue + Element + Webpack + Electron。
+Pug + Sass + ECMAScript + React + Element + Webpack + Electron。
 
 ## 微博的lfid查找方法
 
