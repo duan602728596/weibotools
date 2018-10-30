@@ -172,7 +172,7 @@ class Index extends Component{
     this.setState({ isLoginModalVisible: value });
   }
   // 数组的配置
-  columus(): Array{
+  columns(): Array{
     return [
       {
         title: '用户名',
@@ -223,7 +223,7 @@ class Index extends Component{
         <Table size="middle"
           rowKey="username"
           dataSource={ this.props.userList }
-          columns={ this.columus() }
+          columns={ this.columns() }
           bordered={ true }
           pagination={{
             defaultPageSize: 20,

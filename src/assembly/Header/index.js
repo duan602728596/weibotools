@@ -25,6 +25,11 @@ const navOptions: Array<NavOptionsItem> = [
     id: 'superTopic',
     name: '超级话题',
     href: '/SuperTopic'
+  },
+  {
+    id: 'followHumans',
+    name: '用户关注',
+    href: '/FollowHumans'
   }
 ];
 
