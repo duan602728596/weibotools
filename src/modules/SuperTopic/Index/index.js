@@ -166,6 +166,7 @@ class Index extends Component{
     for(const item: Object of userList) await this.handleGetSuperTopicListClick(item);
 
     action.superTopicLoading(false);
+    action.userList({ data: userList });
   };
   // 渲染
   superTopicListView(userItem: Object): React.ChildrenArray<React.Element>{
