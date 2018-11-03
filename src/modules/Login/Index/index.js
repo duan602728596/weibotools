@@ -69,7 +69,7 @@ class Index extends Component{
       const exists: Object = await queryUsernameIsExists(value.username);
       const time: number = moment().unix() * 1000;
       const argu: [] = [value.username, value.password, time, loginRes.cookie];
-      const { userList }: Object = this.props;
+      const { userList }: { userList: Object } = this.props;
       const item: Object = {
         username: value.username,
         password: value.password,
@@ -151,7 +151,7 @@ class Index extends Component{
   async handleDeleteUserItemClick(item: Object, index: number, event: Event): Promise<void>{
     await deleteUserItem(item.username);
 
-    const { userList }: Object = this.props;
+    const { userList }: { userList: Object } = this.props;
 
     userList.splice(index, 1);
     this.props.action.userList({ data: userList });

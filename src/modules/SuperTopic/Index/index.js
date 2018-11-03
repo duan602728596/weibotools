@@ -61,14 +61,20 @@ class Index extends Component{
   // 刷新微博账户列表
   handleRefreshUserListClick: Function = async(event: ?Event): Promise<void>=>{
     const { rows }: Object = await queryUserList();
-    const { userList, checkInList }: Object = this.props.action;
+    const { userList, checkInList }: {
+      userList: Array,
+      checkInList: Object
+    } = this.props.action;
 
     userList({ data: rows });
     checkInList({ data: {} });
   };
   // 签到单个数据
   async handleCheckInAnItemClick(listItem: Object, userItem: Object, event: ?Event): Promise<void>{
-    const { checkInList, action }: Object = this.props;
+    const { checkInList, action }: {
+      checkInList: Array,
+      action: Object
+    } = this.props;
 
     try{
       const res: ?Object = await checkIn(userItem.cookie, listItem.containerId);
@@ -127,7 +133,10 @@ class Index extends Component{
   }
   // 获取一个用户的超话列表
   async handleGetSuperTopicListClick(userItem: Object, event: ?Event): Promise<void>{
-    const { userList, action }: Object = this.props;
+    const { userList, action }: {
+      userList: Array,
+      action: Object
+    } = this.props;
     // 如果是点击事件，则运行loading动画
     if(event){
       event.stopPropagation();
@@ -159,7 +168,10 @@ class Index extends Component{
   }
   // 一键签到
   handleCheckInAllClick: Function = async(event: Event): Promise<void>=>{
-    const { userList, action }: Object = this.props;
+    const { userList, action }: {
+      userList: Array,
+      action: Object
+    } = this.props;
 
     action.superTopicLoading(true);
 
@@ -170,7 +182,7 @@ class Index extends Component{
   };
   // 渲染
   superTopicListView(userItem: Object): React.ChildrenArray<React.Element>{
-    const { checkInList }: Object = this.props;
+    const { checkInList }: { checkInList: Object } = this.props;
     const element: [] = [];
 
     for(const item: Object of userItem.superTopicList){
@@ -210,7 +222,7 @@ class Index extends Component{
   }
   // 渲染Collapse
   userListCollapseView(list: Array): React.ChildrenArray<React.Element>{
-    const { superTopicLoading }: Object = this.props;
+    const { superTopicLoading }: { superTopicLoading: boolean } = this.props;
 
     return list.map((item: Object, index: number): React.Element=>{
       return (
@@ -240,7 +252,10 @@ class Index extends Component{
     });
   }
   render(): React.Element{
-    const { userList, superTopicLoading }: Object = this.props;
+    const { userList, superTopicLoading }: {
+      userList: Array,
+      superTopicLoading: boolean
+    } = this.props;
 
     return (
       <Fragment>

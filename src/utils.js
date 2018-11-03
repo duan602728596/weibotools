@@ -55,7 +55,7 @@ export function sleep(time: number = 0): Promise{
 
 /**
  * 获取st
- * @param { string } cookie
+ * @param { string } cookie: 用户的cookie
  */
 export function requestSt(cookie: string): Promise{
   return new Promise((resolve: Function, reject: Function): void=>{
