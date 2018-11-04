@@ -9,7 +9,7 @@ import publicStyle from '../../../components/publicStyle/publicstyle.sass';
 import style from './style.sass';
 import { userList } from '../store/reducer';
 import { superTopicLoading, checkInList } from '../store/checkIn';
-import { queryUserList } from '../sql';
+import { queryUserList } from '../../Login/sql';
 import { requestSuperTopicList, checkIn } from '../request';
 import { sleep } from '../../../utils';
 

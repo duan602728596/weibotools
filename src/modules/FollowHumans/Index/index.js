@@ -8,7 +8,7 @@ import { Select, Button, Table, message, Avatar, Popconfirm } from 'antd';
 import publicStyle from '../../../components/publicStyle/publicstyle.sass';
 import style from './style.sass';
 import { userList } from '../store/reducer';
-import { queryUserList } from '../sql';
+import { queryUserList } from '../../Login/sql';
 import { requestSt } from '../../../utils';
 import { requestFollowHumansList, friendshipsApi } from '../request';
 
