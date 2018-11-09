@@ -5,6 +5,7 @@ import reducer from './store/reducer';
 import Content from '../../assembly/Content/index';
 import Sider from '../../assembly/Sider/index';
 import Index from './Index/index';
+import Like from './Like/index';
 
 type OptionItem = {
   id: string,
@@ -18,6 +19,11 @@ const options: Array<OptionItem> = [
     id: 'followHuman_list',
     name: '关注管理',
     href: '/FollowHumans/List'
+  },
+  {
+    id: 'followHuman_like',
+    name: '一键点赞',
+    href: '/FollowHumans/Like'
   }
 ];
 
@@ -30,6 +36,7 @@ class ModuleLayout extends Component{
         <Switch>
           <Route path="/FollowHumans" component={ Index } exact={ true } />
           <Route path="/FollowHumans/List" component={ Index } exact={ true } />
+          <Route path="/FollowHumans/Like" component={ Like } exact={ true } />
         </Switch>
       </Content>
     ];
