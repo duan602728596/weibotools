@@ -192,21 +192,11 @@ class Index extends Component{
         key: 'handle',
         render: (value: number, item: Object, index: number): React.Element=>{
           return (
-            <Button.Group>
-              <Button className={ style.groupBtn }
-                size="small"
-                onClick={ this.handleLoginAgainClick.bind(this, item, false) }
-              >
-                重新登陆
-              </Button>
-              <Button className={ style.groupBtn }
-                size="small"
-                onClick={ this.handleLoginAgainClick.bind(this, item, true) }
-              >
-                使用验证码重新登陆
-              </Button>
+            <Button.Group size="small">
+              <Button onClick={ this.handleLoginAgainClick.bind(this, item, false) }>重新登陆</Button>
+              <Button onClick={ this.handleLoginAgainClick.bind(this, item, true) }>使用验证码重新登陆</Button>
               <Popconfirm title="是否删除？" onConfirm={ this.handleDeleteUserItemClick.bind(this, item, index) }>
-                <Button className={ style.groupBtn } type="danger" size="small">删除</Button>
+                <Button type="danger">删除</Button>
               </Popconfirm>
             </Button.Group>
           );
