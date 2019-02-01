@@ -15,7 +15,7 @@ export default {
   },
   rules: [
     {
-      test: /(dll\.js|weibo-pattlock\.js)/,
+      test: /(dll\.js|gt\.min\.js)/,
       use: [{
         loader: 'file-loader',
         options: {
@@ -28,7 +28,7 @@ export default {
   js: {
     ecmascript: true,
     plugins: [['import', { libraryName: 'iview', libraryDirectory: 'src/components' }]],
-    exclude: /(dll\.js|node_modules)/
+    exclude: /(dll\.js|gt\.min\.js|node_modules)/
   },
   sass: {
     include: /src/,
