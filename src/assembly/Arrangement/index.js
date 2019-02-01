@@ -15,7 +15,6 @@ export default {
       <i-layout class={ style.layout }>
         <Header />
         <router-view />
-        <i-footer class={ style.footer }>版权所有</i-footer>
       </i-layout>
     );
   }

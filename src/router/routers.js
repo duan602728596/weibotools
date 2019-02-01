@@ -15,6 +15,11 @@ const routers: VueRouter = new VueRouter({
       path: '/Index',
       name: 'index',
       component: Index
+    },
+    {
+      path: '/Login',
+      name: 'login',
+      component: (): Promise => import('../modules/Login/Layout')
     }
   ]
 });

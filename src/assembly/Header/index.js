@@ -12,6 +12,11 @@ export const navOptions: options[] = [
     id: 'index',
     href: '/Index',
     icon: 'ios-home'
+  },
+  {
+    id: 'login',
+    name: '超级话题签到',
+    href: '/Login'
   }
 ];
 

@@ -3,3 +3,4 @@ config
 bin
 .dll
 build
+src/gt.min.js

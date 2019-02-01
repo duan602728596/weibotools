@@ -8,7 +8,8 @@ let win = null;
 function createWindow(){
   win = new BrowserWindow({
     width: 1400,
-    height: 800
+    height: 800,
+    icon: path.join(__dirname, '../titleBarIcon.png')
   });
 
   if(process.env.NODE_ENV === 'development'){
